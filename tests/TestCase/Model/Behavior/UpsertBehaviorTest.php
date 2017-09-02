@@ -8,12 +8,9 @@ use Cake\TestSuite\TestCase;
 class UpsertBehaviorTest extends TestCase
 {
     /**
-     * Test subject
-     *
      * @var \Cake\ORM\Table
      */
     public $Articles;
-    public $Behavior;
     public $fixtures = [
         'plugin.Itosho/StrawberryCake.Articles'
     ];
@@ -22,7 +19,7 @@ class UpsertBehaviorTest extends TestCase
     {
         parent::setUp();
         $this->Articles = TableRegistry::get('Itosho/StrawberryCake.Articles');
-        $this->Behavior = $this->Articles->addBehavior('Upsert', [
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
             'uniqueColumns' => ['title'],
             'updateColumns' => ['body', 'published', 'modified']
         ]);
@@ -32,7 +29,7 @@ class UpsertBehaviorTest extends TestCase
     {
         parent::tearDown();
         TableRegistry::clear();
-        unset($this->Behavior, $this->Articles);
+        unset($this->Articles);
     }
 
     public function testUpsertByInsert()
@@ -49,10 +46,51 @@ class UpsertBehaviorTest extends TestCase
 
         $this->assertTrue($this->Articles->exists($data), 'fail insert.');
 
-        $this->assertSame(4, $actual->id, 'return invalid id.');
+        $insertId = 4;
+        $this->assertSame($insertId, $actual->id, 'return invalid id.');
         $this->assertSame($entity->body, $actual->body, 'return invalid body.');
         $this->assertSame($entity->published, $actual->published, 'return invalid published.');
-        $this->assertSame($entity->created, $actual->created, 'return invalid created.');
-        $this->assertSame($entity->modified, $actual->modified, 'return invalid modified.');
+        $this->assertSame(
+            $entity->created->toDateTimeString(),
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
+    }
+
+    public function testUpsertByUpdate()
+    {
+        $data = [
+            'title' => 'First Article',
+            'body' => 'Brand New First Article Body',
+            'published' => '0',
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
+        ];
+        $entity = $this->Articles->newEntity($data);
+        $actual = $this->Articles->upsert($entity);
+        $currentCreated = '2007-03-18 10:39:23';
+
+        $data['created'] = $currentCreated;
+        $this->assertTrue($this->Articles->exists($data), 'fail update.');
+
+        $updateId = 1;
+        $this->assertSame($updateId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->body, $actual->body, 'return invalid body.');
+        $this->assertSame($entity->published, $actual->published, 'return invalid published.');
+        $this->assertSame(
+            $currentCreated,
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
     }
 }
