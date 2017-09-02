@@ -64,6 +64,46 @@ class UpsertBehavior extends Behavior
     }
 
     /**
+     * execute bulk upsert query
+     *
+     * @param array $entities upsert entities
+     *
+     * @return \Cake\Database\StatementInterface query result
+     */
+    public function bulkUpsert(array $entities)
+    {
+        if (!$this->isValidArrayConfig('updateColumns')) {
+            throw new LogicException('config `updateColumns` is invalid.');
+        }
+
+        $saveData = [];
+        foreach ($entities as $entity) {
+            $saveData[] = $entity->toArray();
+        }
+
+        if (!isset($saveData[0])) {
+            throw new LogicException('entities has no save data.');
+        }
+        $fields = array_keys($saveData[0]);
+
+        $updateColumns = $this->_config['updateColumns'];
+        $updateValues = [];
+        foreach ($updateColumns as $column) {
+            $updateValues[] = "`{$column}`=VALUES(`{$column}`)";
+        }
+        $updateStatement = implode(', ', $updateValues);
+        $expression = 'ON DUPLICATE KEY UPDATE ' . $updateStatement;
+
+        $query = $this->_table
+            ->query()
+            ->insert($fields)
+            ->epilog($expression);
+        $query->clause('values')->values($saveData);
+
+        return $query->execute();
+    }
+
+    /**
      * validate config value
      *
      * @param string $configName config key
