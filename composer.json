@@ -1,5 +1,5 @@
 {
-  "name": "itosho/StrawberryCake",
+  "name": "itosho/strawberry-cake",
   "description": "CakePHP behavior plugin to simplify some complicated query.",
   "type": "cakephp-plugin",
   "keywords": [
@@ -9,7 +9,7 @@
     "upsert",
     "bulk"
   ],
-  "homepage": "https://github.com/itosho/StrawberryCake",
+  "homepage": "https://github.com/itosho/strawberry-cake",
   "license": "MIT",
   "authors": [
     {
@@ -19,8 +19,8 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/itosho/StrawberryCake/issues",
-    "source": "https://github.com/itosho/StrawberryCake"
+    "issues": "https://github.com/itosho/strawberry-cake/issues",
+    "source": "https://github.com/itosho/strawberry-cake"
   },
   "require": {
     "cakephp/orm": "3.5.*"
