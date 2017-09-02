@@ -93,4 +93,46 @@ class UpsertBehaviorTest extends TestCase
             'return invalid modified.'
         );
     }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testUpsertInvalidUpdateColumnsConfig()
+    {
+        $this->Articles->removeBehavior('Upsert');
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'uniqueColumns' => ['title']
+        ]);
+
+        $data = [
+            'title' => 'Fourth Article',
+            'body' => 'Fourth Article Body',
+            'published' => '1',
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
+        ];
+        $entity = $this->Articles->newEntity($data);
+        $this->Articles->upsert($entity);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testUpsertInvalidUniqueColumnsConfig()
+    {
+        $this->Articles->removeBehavior('Upsert');
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['body', 'published', 'modified']
+        ]);
+
+        $data = [
+            'title' => 'Fourth Article',
+            'body' => 'Fourth Article Body',
+            'published' => '1',
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
+        ];
+        $entity = $this->Articles->newEntity($data);
+        $this->Articles->upsert($entity);
+    }
 }

@@ -4,12 +4,13 @@ namespace Itosho\StrawberryCake\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
+use LogicException;
 
 class UpsertBehavior extends Behavior
 {
     protected $_defaultConfig = [
-        'uniqueColumns' => null,
-        'updateColumns' => null
+        'updateColumns' => null,
+        'uniqueColumns' => null
     ];
 
     /**
@@ -21,6 +22,13 @@ class UpsertBehavior extends Behavior
      */
     public function upsert(Entity $entity)
     {
+        if (!$this->isValidArrayConfig('updateColumns')) {
+            throw new LogicException('config `updateColumns` is invalid.');
+        }
+        if (!$this->isValidArrayConfig('uniqueColumns')) {
+            throw new LogicException('config `uniqueColumns` is invalid.');
+        }
+
         $upsertData = $entity->toArray();
         $fields = array_keys($upsertData);
 
@@ -53,5 +61,19 @@ class UpsertBehavior extends Behavior
             ->first();
 
         return $upsertEntity;
+    }
+
+    /**
+     * validate config value
+     *
+     * @param string $configName config key
+     *
+     * @return bool valid or invalid
+     */
+    private function isValidArrayConfig($configName)
+    {
+        $config = $this->_config[$configName];
+
+        return is_array($config) && !empty($config);
     }
 }
