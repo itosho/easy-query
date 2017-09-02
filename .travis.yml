@@ -9,8 +9,6 @@ sudo: false
 env:
   matrix:
     - DB=mysql db_dsn='mysql://root@0.0.0.0/cakephp_test'
-    - DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
-    - DB=sqlite db_dsn='sqlite:///:memory:'
 
   global:
     - DEFAULT=1
@@ -29,7 +27,6 @@ before_script:
   - composer install --prefer-dist --no-interaction
 
   - if [[ $DB = 'mysql' ]]; then mysql -e 'CREATE DATABASE cakephp_test;'; fi
-  - if [[ $DB = 'pgsql' ]]; then psql -c 'CREATE DATABASE cakephp_test;' -U postgres; fi
 
   - if [[ $PHPCS = 1 ]]; then composer require cakephp/cakephp-codesniffer:"^3.0"; fi
 
