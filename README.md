@@ -1,6 +1,6 @@
-# StrawberryCake
+# strawberry-cake
 
-StrawberryCake is CakePHP behavior plugin to simplify some complicated query.
+strawberry-cake is CakePHP behavior plugin to simplify some complicated query.
 
 [![Build Status](https://travis-ci.org/itosho/StrawberryCake.svg?branch=master)](https://travis-ci.org/itosho/StrawberryCake)
 [![codecov](https://codecov.io/gh/itosho/strawberry-cake/branch/master/graph/badge.svg)](https://codecov.io/gh/itosho/strawberry-cake)
