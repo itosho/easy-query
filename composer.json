@@ -1,0 +1,42 @@
+{
+  "name": "itosho/StrawberryCake",
+  "description": "CakePHP behavior plugin to simplify some complicated query.",
+  "type": "cakephp-plugin",
+  "keywords": [
+    "cakephp",
+    "behavior",
+    "plugin",
+    "upsert",
+    "bulk"
+  ],
+  "homepage": "https://github.com/itosho/StrawberryCake",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "itosho",
+      "role": "Author",
+      "homepage": "https://github.com/itosho"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/itosho/StrawberryCake/issues",
+    "source": "https://github.com/itosho/StrawberryCake"
+  },
+  "require": {
+    "cakephp/orm": "3.5.*"
+  },
+  "require-dev": {
+    "cakephp/cakephp": "3.5.*",
+    "phpunit/phpunit": "^5.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Itosho\\StrawberryCake\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Itosho\\StrawberryCake\\Test\\": "tests"
+    }
+  }
+}
