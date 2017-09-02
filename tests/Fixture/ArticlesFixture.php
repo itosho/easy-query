@@ -14,7 +14,8 @@ class ArticlesFixture extends TestFixture
         'created' => 'datetime',
         'modified' => 'datetime',
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id']]
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'unique' => ['type' => 'unique', 'columns' => ['title']]
         ]
     ];
     public $records = [
