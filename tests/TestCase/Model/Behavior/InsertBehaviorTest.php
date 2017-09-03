@@ -65,6 +65,6 @@ class InsertBehaviorTest extends TestCase
      */
     public function testBulkUpsertNoSaveData()
     {
-        $this->Tags->bulkUpsert([]);
+        $this->Tags->bulkInsert([]);
     }
 }
