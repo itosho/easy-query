@@ -135,4 +135,74 @@ class UpsertBehaviorTest extends TestCase
         $entity = $this->Articles->newEntity($data);
         $this->Articles->upsert($entity);
     }
+
+    public function testBulkUpsert()
+    {
+        // insert
+        $insertNow = '2017-09-01 00:00:00';
+        $insertData = [
+            [
+                'title' => 'Fourth Article',
+                'body' => 'Fourth Article Body',
+                'published' => '1',
+                'created' => $insertNow,
+                'modified' => $insertNow
+            ],
+            [
+                'title' => 'Fifth Article',
+                'body' => 'Fifth Article Body',
+                'published' => '1',
+                'created' => $insertNow,
+                'modified' => $insertNow
+            ],
+            [
+                'title' => 'Sixth Article',
+                'body' => 'Sixth Article Body',
+                'published' => '1',
+                'created' => $insertNow,
+                'modified' => $insertNow
+            ]
+        ];
+        $insertEntities = $this->Articles->newEntities($insertData);
+        $this->Articles->bulkUpsert($insertEntities);
+
+        foreach($insertData as $data) {
+            $actual = $this->Articles->exists($data);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+
+        // update
+        $updateNow = '2017-09-02 00:00:00';
+        $updateData = [
+            [
+                'title' => 'Fourth Article',
+                'body' => 'Brand New Fourth Article Body',
+                'published' => '0',
+                'created' => $updateNow,
+                'modified' => $updateNow
+            ],
+            [
+                'title' => 'Fifth Article',
+                'body' => 'Brand New Fifth Article Body',
+                'published' => '0',
+                'created' => $updateNow,
+                'modified' => $updateNow
+            ],
+            [
+                'title' => 'Sixth Article',
+                'body' => 'Brand New Sixth Article Body',
+                'published' => '0',
+                'created' => $updateNow,
+                'modified' => $updateNow
+            ]
+        ];
+        $updateEntities = $this->Articles->newEntities($updateData);
+        $this->Articles->bulkUpsert($updateEntities);
+
+        foreach($updateData as $data) {
+            $data['created'] = $insertNow;
+            $actual = $this->Articles->exists($data);
+            $this->assertTrue($actual, 'fail update.');
+        }
+    }
 }
