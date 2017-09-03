@@ -96,7 +96,7 @@ class UpsertBehaviorTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage 'config `updateColumns` is invalid.'
+     * @expectedExceptionMessage config updateColumns is invalid.
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
@@ -118,7 +118,7 @@ class UpsertBehaviorTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage 'config `uniqueColumns` is invalid.'
+     * @expectedExceptionMessage config uniqueColumns is invalid.
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
@@ -215,7 +215,7 @@ class UpsertBehaviorTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage 'config `updateColumns` is invalid.'
+     * @expectedExceptionMessage config updateColumns is invalid.
      */
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
@@ -245,7 +245,7 @@ class UpsertBehaviorTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage 'entities has no save data.'
+     * @expectedExceptionMessage entities has no save data.
      */
     public function testBulkUpsertNoSaveData()
     {

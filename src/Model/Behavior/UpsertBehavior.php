@@ -23,10 +23,10 @@ class UpsertBehavior extends Behavior
     public function upsert(Entity $entity)
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
-            throw new LogicException('config `updateColumns` is invalid.');
+            throw new LogicException('config updateColumns is invalid.');
         }
         if (!$this->isValidArrayConfig('uniqueColumns')) {
-            throw new LogicException('config `uniqueColumns` is invalid.');
+            throw new LogicException('config uniqueColumns is invalid.');
         }
 
         $upsertData = $entity->toArray();
@@ -73,7 +73,7 @@ class UpsertBehavior extends Behavior
     public function bulkUpsert(array $entities)
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
-            throw new LogicException('config `updateColumns` is invalid.');
+            throw new LogicException('config updateColumns is invalid.');
         }
 
         $saveData = [];
