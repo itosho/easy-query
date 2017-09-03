@@ -96,6 +96,7 @@ class UpsertBehaviorTest extends TestCase
 
     /**
      * @expectedException \LogicException
+     * @expectedExceptionMessage config updateColumns is invalid.
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
@@ -117,6 +118,7 @@ class UpsertBehaviorTest extends TestCase
 
     /**
      * @expectedException \LogicException
+     * @expectedExceptionMessage config uniqueColumns is invalid.
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
@@ -134,5 +136,124 @@ class UpsertBehaviorTest extends TestCase
         ];
         $entity = $this->Articles->newEntity($data);
         $this->Articles->upsert($entity);
+    }
+
+    public function testBulkUpsert()
+    {
+        $this->Articles->removeBehavior('Upsert');
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['body', 'published', 'modified']
+        ]);
+
+        // insert
+        $insertNow = '2017-09-01 00:00:00';
+        $insertData = [
+            [
+                'title' => 'Fourth Article',
+                'body' => 'Fourth Article Body',
+                'published' => '1',
+                'created' => $insertNow,
+                'modified' => $insertNow
+            ],
+            [
+                'title' => 'Fifth Article',
+                'body' => 'Fifth Article Body',
+                'published' => '1',
+                'created' => $insertNow,
+                'modified' => $insertNow
+            ],
+            [
+                'title' => 'Sixth Article',
+                'body' => 'Sixth Article Body',
+                'published' => '1',
+                'created' => $insertNow,
+                'modified' => $insertNow
+            ]
+        ];
+        $insertEntities = $this->Articles->newEntities($insertData);
+        $this->Articles->bulkUpsert($insertEntities);
+
+        foreach ($insertData as $data) {
+            $actual = $this->Articles->exists($data);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+
+        // update
+        $updateNow = '2017-09-02 00:00:00';
+        $updateData = [
+            [
+                'title' => 'Fourth Article',
+                'body' => 'Brand New Fourth Article Body',
+                'published' => '0',
+                'created' => $updateNow,
+                'modified' => $updateNow
+            ],
+            [
+                'title' => 'Fifth Article',
+                'body' => 'Brand New Fifth Article Body',
+                'published' => '0',
+                'created' => $updateNow,
+                'modified' => $updateNow
+            ],
+            [
+                'title' => 'Sixth Article',
+                'body' => 'Brand New Sixth Article Body',
+                'published' => '0',
+                'created' => $updateNow,
+                'modified' => $updateNow
+            ]
+        ];
+        $updateEntities = $this->Articles->newEntities($updateData);
+        $this->Articles->bulkUpsert($updateEntities);
+
+        foreach ($updateData as $data) {
+            $data['created'] = $insertNow;
+            $actual = $this->Articles->exists($data);
+            $this->assertTrue($actual, 'fail update.');
+        }
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage config updateColumns is invalid.
+     */
+    public function testBulkUpsertInvalidUpdateColumnsConfig()
+    {
+        $this->Articles->removeBehavior('Upsert');
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert');
+
+        $data = [
+            [
+                'title' => 'Fourth Article',
+                'body' => 'Fourth Article Body',
+                'published' => '1',
+                'created' => '2017-09-01 00:00:00',
+                'modified' => '2017-09-01 00:00:00'
+            ],
+            [
+                'title' => 'Fifth Article',
+                'body' => 'Fifth Article Body',
+                'published' => '1',
+                'created' => '2017-09-01 00:00:00',
+                'modified' => '2017-09-01 00:00:00'
+            ]
+        ];
+
+        $entities = $this->Articles->newEntities($data);
+        $this->Articles->bulkUpsert($entities);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage entities has no save data.
+     */
+    public function testBulkUpsertNoSaveData()
+    {
+        $this->Articles->removeBehavior('Upsert');
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['body', 'published', 'modified']
+        ]);
+
+        $this->Articles->bulkUpsert([]);
     }
 }
