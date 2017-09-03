@@ -71,7 +71,7 @@ class UpsertBehaviorTest extends TestCase
         ];
         $entity = $this->Tags->newEntity($data);
         $actual = $this->Tags->upsert($entity);
-        $currentCreated = '2007-09-01 00:00:00';
+        $currentCreated = '2017-09-01 00:00:00';
 
         $data['created'] = $currentCreated;
         $this->assertTrue($this->Tags->exists($data), 'fail update.');
@@ -202,7 +202,7 @@ class UpsertBehaviorTest extends TestCase
         $entities = $this->Tags->newEntities($data);
         $this->Tags->bulkUpsert($entities);
 
-        $currentCreated = '2007-09-01 00:00:00';
+        $currentCreated = '2017-09-01 00:00:00';
         foreach ($data as $conditions) {
             $conditions['created'] = $currentCreated;
             $actual = $this->Tags->exists($conditions);
