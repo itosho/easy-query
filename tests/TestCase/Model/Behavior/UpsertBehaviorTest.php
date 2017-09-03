@@ -10,18 +10,18 @@ class UpsertBehaviorTest extends TestCase
     /**
      * @var \Cake\ORM\Table
      */
-    public $Articles;
+    public $Tags;
     public $fixtures = [
-        'plugin.Itosho/StrawberryCake.Articles'
+        'plugin.Itosho/StrawberryCake.Tags'
     ];
 
     public function setUp()
     {
         parent::setUp();
-        $this->Articles = TableRegistry::get('Itosho/StrawberryCake.Articles');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
-            'uniqueColumns' => ['title'],
-            'updateColumns' => ['body', 'published', 'modified']
+        $this->Tags = TableRegistry::get('Itosho/StrawberryCake.Tags');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'uniqueColumns' => ['name'],
+            'updateColumns' => ['description', 'modified']
         ]);
     }
 
@@ -29,22 +29,21 @@ class UpsertBehaviorTest extends TestCase
     {
         parent::tearDown();
         TableRegistry::clear();
-        unset($this->Articles);
+        unset($this->Tags);
     }
 
     public function testUpsertByInsert()
     {
         $data = [
-            'title' => 'Fourth Article',
-            'body' => 'Fourth Article Body',
-            'published' => '1',
+            'name' => 'tag4',
+            'description' => 'tag4 description',
             'created' => '2017-09-01 00:00:00',
             'modified' => '2017-09-01 00:00:00'
         ];
-        $entity = $this->Articles->newEntity($data);
-        $actual = $this->Articles->upsert($entity);
+        $entity = $this->Tags->newEntity($data);
+        $actual = $this->Tags->upsert($entity);
 
-        $this->assertTrue($this->Articles->exists($data), 'fail insert.');
+        $this->assertTrue($this->Tags->exists($data), 'fail insert.');
 
         $insertId = 4;
         $this->assertSame($insertId, $actual->id, 'return invalid id.');
@@ -65,18 +64,17 @@ class UpsertBehaviorTest extends TestCase
     public function testUpsertByUpdate()
     {
         $data = [
-            'title' => 'First Article',
-            'body' => 'Brand New First Article Body',
-            'published' => '0',
-            'created' => '2017-09-01 00:00:00',
-            'modified' => '2017-09-01 00:00:00'
+            'name' => 'tag1',
+            'description' => 'tag1 description',
+            'created' => '2017-10-01 00:00:00',
+            'modified' => '2017-10-01 00:00:00'
         ];
-        $entity = $this->Articles->newEntity($data);
-        $actual = $this->Articles->upsert($entity);
-        $currentCreated = '2007-03-18 10:39:23';
+        $entity = $this->Tags->newEntity($data);
+        $actual = $this->Tags->upsert($entity);
+        $currentCreated = '2007-09-01 00:00:00';
 
         $data['created'] = $currentCreated;
-        $this->assertTrue($this->Articles->exists($data), 'fail update.');
+        $this->assertTrue($this->Tags->exists($data), 'fail update.');
 
         $updateId = 1;
         $this->assertSame($updateId, $actual->id, 'return invalid id.');
@@ -100,20 +98,19 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
-        $this->Articles->removeBehavior('Upsert');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
-            'uniqueColumns' => ['title']
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'uniqueColumns' => ['name']
         ]);
 
         $data = [
-            'title' => 'Fourth Article',
-            'body' => 'Fourth Article Body',
-            'published' => '1',
+            'name' => 'tag4',
+            'description' => 'tag4 description',
             'created' => '2017-09-01 00:00:00',
             'modified' => '2017-09-01 00:00:00'
         ];
-        $entity = $this->Articles->newEntity($data);
-        $this->Articles->upsert($entity);
+        $entity = $this->Tags->newEntity($data);
+        $this->Tags->upsert($entity);
     }
 
     /**
@@ -122,93 +119,93 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
-        $this->Articles->removeBehavior('Upsert');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
-            'updateColumns' => ['body', 'published', 'modified']
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['description', 'modified']
         ]);
 
         $data = [
-            'title' => 'Fourth Article',
-            'body' => 'Fourth Article Body',
-            'published' => '1',
+            'name' => 'tag4',
+            'description' => 'tag4 description',
             'created' => '2017-09-01 00:00:00',
             'modified' => '2017-09-01 00:00:00'
         ];
-        $entity = $this->Articles->newEntity($data);
-        $this->Articles->upsert($entity);
+        $entity = $this->Tags->newEntity($data);
+        $this->Tags->upsert($entity);
     }
 
-    public function testBulkUpsert()
+    public function testBulkUpsertByInsert()
     {
-        $this->Articles->removeBehavior('Upsert');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
-            'updateColumns' => ['body', 'published', 'modified']
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['description', 'modified']
         ]);
 
-        // insert
-        $insertNow = '2017-09-01 00:00:00';
-        $insertData = [
+        $now = '2017-09-01 00:00:00';
+        $data = [
             [
-                'title' => 'Fourth Article',
-                'body' => 'Fourth Article Body',
-                'published' => '1',
-                'created' => $insertNow,
-                'modified' => $insertNow
+                'name' => 'tag4',
+                'description' => 'tag4 description',
+                'created' => $now,
+                'modified' => $now
             ],
             [
-                'title' => 'Fifth Article',
-                'body' => 'Fifth Article Body',
-                'published' => '1',
-                'created' => $insertNow,
-                'modified' => $insertNow
+                'name' => 'tag5',
+                'description' => 'tag5 description',
+                'created' => $now,
+                'modified' => $now
             ],
             [
-                'title' => 'Sixth Article',
-                'body' => 'Sixth Article Body',
-                'published' => '1',
-                'created' => $insertNow,
-                'modified' => $insertNow
+                'name' => 'tag6',
+                'description' => 'tag6 description',
+                'created' => $now,
+                'modified' => $now
             ]
         ];
-        $insertEntities = $this->Articles->newEntities($insertData);
-        $this->Articles->bulkUpsert($insertEntities);
+        $entities = $this->Tags->newEntities($data);
+        $this->Tags->bulkUpsert($entities);
 
-        foreach ($insertData as $data) {
-            $actual = $this->Articles->exists($data);
+        foreach ($data as $conditions) {
+            $actual = $this->Tags->exists($conditions);
             $this->assertTrue($actual, 'fail insert.');
         }
+    }
 
-        // update
-        $updateNow = '2017-09-02 00:00:00';
-        $updateData = [
+    public function testBulkUpsertByUpdate()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['description', 'modified']
+        ]);
+
+        $now = '2017-10-01 00:00:00';
+        $data = [
             [
-                'title' => 'Fourth Article',
-                'body' => 'Brand New Fourth Article Body',
-                'published' => '0',
-                'created' => $updateNow,
-                'modified' => $updateNow
+                'name' => 'tag1',
+                'description' => 'tag1 description',
+                'created' => $now,
+                'modified' => $now
             ],
             [
-                'title' => 'Fifth Article',
-                'body' => 'Brand New Fifth Article Body',
-                'published' => '0',
-                'created' => $updateNow,
-                'modified' => $updateNow
+                'name' => 'tag2',
+                'description' => 'tag2 description',
+                'created' => $now,
+                'modified' => $now
             ],
             [
-                'title' => 'Sixth Article',
-                'body' => 'Brand New Sixth Article Body',
-                'published' => '0',
-                'created' => $updateNow,
-                'modified' => $updateNow
+                'name' => 'tag3',
+                'description' => 'tag3 description',
+                'created' => $now,
+                'modified' => $now
             ]
         ];
-        $updateEntities = $this->Articles->newEntities($updateData);
-        $this->Articles->bulkUpsert($updateEntities);
+        $entities = $this->Tags->newEntities($data);
+        $this->Tags->bulkUpsert($entities);
 
-        foreach ($updateData as $data) {
-            $data['created'] = $insertNow;
-            $actual = $this->Articles->exists($data);
+        $currentCreated = '2007-09-01 00:00:00';
+        foreach ($data as $conditions) {
+            $conditions['created'] = $currentCreated;
+            $actual = $this->Tags->exists($conditions);
             $this->assertTrue($actual, 'fail update.');
         }
     }
@@ -219,28 +216,33 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
-        $this->Articles->removeBehavior('Upsert');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert');
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert');
 
+        $now = '2017-09-01 00:00:00';
         $data = [
             [
-                'title' => 'Fourth Article',
-                'body' => 'Fourth Article Body',
-                'published' => '1',
-                'created' => '2017-09-01 00:00:00',
-                'modified' => '2017-09-01 00:00:00'
+                'name' => 'tag4',
+                'description' => 'tag4 description',
+                'created' => $now,
+                'modified' => $now
             ],
             [
-                'title' => 'Fifth Article',
-                'body' => 'Fifth Article Body',
-                'published' => '1',
-                'created' => '2017-09-01 00:00:00',
-                'modified' => '2017-09-01 00:00:00'
+                'name' => 'tag5',
+                'description' => 'tag5 description',
+                'created' => $now,
+                'modified' => $now
+            ],
+            [
+                'name' => 'tag6',
+                'description' => 'tag6 description',
+                'created' => $now,
+                'modified' => $now
             ]
         ];
 
-        $entities = $this->Articles->newEntities($data);
-        $this->Articles->bulkUpsert($entities);
+        $entities = $this->Tags->newEntities($data);
+        $this->Tags->bulkUpsert($entities);
     }
 
     /**
@@ -249,11 +251,11 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testBulkUpsertNoSaveData()
     {
-        $this->Articles->removeBehavior('Upsert');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Upsert', [
-            'updateColumns' => ['body', 'published', 'modified']
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+            'updateColumns' => ['description', 'modified']
         ]);
 
-        $this->Articles->bulkUpsert([]);
+        $this->Tags->bulkUpsert([]);
     }
 }

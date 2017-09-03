@@ -14,8 +14,7 @@ class ArticlesFixture extends TestFixture
         'created' => 'datetime',
         'modified' => 'datetime',
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id']],
-            'unique' => ['type' => 'unique', 'columns' => ['title']]
+            'primary' => ['type' => 'primary', 'columns' => ['id']]
         ]
     ];
     public $records = [
@@ -23,22 +22,22 @@ class ArticlesFixture extends TestFixture
             'title' => 'First Article',
             'body' => 'First Article Body',
             'published' => '1',
-            'created' => '2007-03-18 10:39:23',
-            'modified' => '2007-03-18 10:41:31'
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
         ],
         [
             'title' => 'Second Article',
             'body' => 'Second Article Body',
             'published' => '1',
-            'created' => '2007-03-18 10:41:23',
-            'modified' => '2007-03-18 10:43:31'
+            'created' => '2017-09-02 00:00:00',
+            'modified' => '2017-09-02 00:00:00'
         ],
         [
             'title' => 'Third Article',
             'body' => 'Third Article Body',
             'published' => '1',
-            'created' => '2007-03-18 10:43:23',
-            'modified' => '2007-03-18 10:45:31'
+            'created' => '2017-09-03 00:00:00',
+            'modified' => '2017-09-03 00:00:00'
         ]
     ];
 }

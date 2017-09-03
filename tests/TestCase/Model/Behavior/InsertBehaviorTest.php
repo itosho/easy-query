@@ -10,51 +10,56 @@ class InsertBehaviorTest extends TestCase
     /**
      * @var \Cake\ORM\Table
      */
-    public $Tags;
+    public $Articles;
     public $fixtures = [
-        'plugin.Itosho/StrawberryCake.Tags'
+        'plugin.Itosho/StrawberryCake.Articles'
     ];
 
     public function setUp()
     {
         parent::setUp();
-        $this->Tags = TableRegistry::get('Itosho/StrawberryCake.Tags');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Insert');
+        $this->Articles = TableRegistry::get('Itosho/StrawberryCake.Articles');
+        $this->Articles->addBehavior('Itosho/StrawberryCake.Insert');
     }
 
     public function tearDown()
     {
         parent::tearDown();
         TableRegistry::clear();
-        unset($this->Tags);
+        unset($this->Articles);
     }
 
     public function testBulkUpsert()
     {
-        // insert
         $now = '2017-09-01 00:00:00';
         $data = [
             [
-                'name' => 'tag4',
+                'title' => 'Fourth Article',
+                'body' => 'Fourth Article Body',
+                'published' => '1',
                 'created' => $now,
                 'modified' => $now
             ],
             [
-                'name' => 'tag5',
+                'title' => 'Fifth Article',
+                'body' => 'Fifth Article Body',
+                'published' => '1',
                 'created' => $now,
                 'modified' => $now
             ],
             [
-                'name' => 'tag6',
+                'title' => 'Sixth Article',
+                'body' => 'Sixth Article Body',
+                'published' => '1',
                 'created' => $now,
                 'modified' => $now
             ]
         ];
-        $entities = $this->Tags->newEntities($data);
-        $this->Tags->bulkInsert($entities);
+        $entities = $this->Articles->newEntities($data);
+        $this->Articles->bulkInsert($entities);
 
         foreach ($data as $conditions) {
-            $actual = $this->Tags->exists($conditions);
+            $actual = $this->Articles->exists($conditions);
             $this->assertTrue($actual, 'fail insert.');
         }
     }
@@ -65,6 +70,6 @@ class InsertBehaviorTest extends TestCase
      */
     public function testBulkUpsertNoSaveData()
     {
-        $this->Tags->bulkInsert([]);
+        $this->Articles->bulkInsert([]);
     }
 }
