@@ -1,13 +1,14 @@
 {
   "name": "itosho/strawberry-cake",
-  "description": "CakePHP behavior plugin to simplify some complicated query.",
+  "description": "CakePHP behavior plugin for easily some complicated queries like upsert, bulk upsert and bulk insert.",
   "type": "cakephp-plugin",
   "keywords": [
     "cakephp",
     "behavior",
     "plugin",
     "upsert",
-    "bulk"
+    "bulk",
+    "insert"
   ],
   "homepage": "https://github.com/itosho/strawberry-cake",
   "license": "MIT",
