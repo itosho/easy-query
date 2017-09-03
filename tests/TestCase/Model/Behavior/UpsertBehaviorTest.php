@@ -65,7 +65,7 @@ class UpsertBehaviorTest extends TestCase
     {
         $data = [
             'name' => 'tag1',
-            'description' => 'tag1 description',
+            'description' => 'brand new tag1 description',
             'created' => '2017-10-01 00:00:00',
             'modified' => '2017-10-01 00:00:00'
         ];
@@ -182,19 +182,19 @@ class UpsertBehaviorTest extends TestCase
         $data = [
             [
                 'name' => 'tag1',
-                'description' => 'tag1 description',
+                'description' => 'brand new tag1 description',
                 'created' => $now,
                 'modified' => $now
             ],
             [
                 'name' => 'tag2',
-                'description' => 'tag2 description',
+                'description' => 'brand new tag2 description',
                 'created' => $now,
                 'modified' => $now
             ],
             [
                 'name' => 'tag3',
-                'description' => 'tag3 description',
+                'description' => 'brand new tag3 description',
                 'created' => $now,
                 'modified' => $now
             ]
