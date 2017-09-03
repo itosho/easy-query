@@ -29,15 +29,15 @@ class ArticlesFixture extends TestFixture
             'title' => 'Second Article',
             'body' => 'Second Article Body',
             'published' => '1',
-            'created' => '2017-09-02 00:00:00',
-            'modified' => '2017-09-02 00:00:00'
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
         ],
         [
             'title' => 'Third Article',
             'body' => 'Third Article Body',
             'published' => '1',
-            'created' => '2017-09-03 00:00:00',
-            'modified' => '2017-09-03 00:00:00'
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
         ]
     ];
 }

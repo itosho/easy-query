@@ -27,14 +27,14 @@ class TagsFixture extends TestFixture
         [
             'name' => 'tag2',
             'description' => 'tag2 description',
-            'created' => '2017-09-02 00:00:00',
-            'modified' => '2017-09-02 00:00:00'
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
         ],
         [
             'name' => 'tag3',
             'description' => 'tag3 description',
-            'created' => '2017-09-03 00:00:00',
-            'modified' => '2017-09-03 00:00:00'
+            'created' => '2017-09-01 00:00:00',
+            'modified' => '2017-09-01 00:00:00'
         ]
     ];
 }
