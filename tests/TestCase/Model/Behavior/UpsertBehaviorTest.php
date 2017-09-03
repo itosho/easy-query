@@ -240,7 +240,7 @@ class UpsertBehaviorTest extends TestCase
         ];
 
         $entities = $this->Articles->newEntities($data);
-        $this->Articles->bulUpsert($entities);
+        $this->Articles->bulkUpsert($entities);
     }
 
     /**
@@ -254,6 +254,6 @@ class UpsertBehaviorTest extends TestCase
             'updateColumns' => ['body', 'published', 'modified']
         ]);
 
-        $this->Articles->bulUpsert([]);
+        $this->Articles->bulkUpsert([]);
     }
 }
