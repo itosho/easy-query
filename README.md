@@ -1,4 +1,4 @@
-# strawberry-cake
+# Easy Query
 
 [![Build Status](https://travis-ci.org/itosho/strawberry-cake.svg?branch=master)](https://travis-ci.org/itosho/strawberry-cake)
 [![codecov](https://codecov.io/gh/itosho/strawberry-cake/branch/master/graph/badge.svg)](https://codecov.io/gh/itosho/strawberry-cake)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Itosho\StrawberryCake\Model\Behavior;
+namespace Itosho\EasyQuery\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Entity;

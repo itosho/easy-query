@@ -1,6 +1,6 @@
 <?php
 
-namespace Itosho\StrawberryCake\Test\Fixture;
+namespace Itosho\EasyQuery\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
