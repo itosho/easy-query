@@ -1,6 +1,6 @@
 <?php
 
-namespace Itosho\StrawberryCake\Test\TestCase\Model\Behavior;
+namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
@@ -12,14 +12,14 @@ class InsertBehaviorTest extends TestCase
      */
     public $Articles;
     public $fixtures = [
-        'plugin.Itosho/StrawberryCake.Articles'
+        'plugin.Itosho/EasyQuery.Articles'
     ];
 
     public function setUp()
     {
         parent::setUp();
-        $this->Articles = TableRegistry::get('Itosho/StrawberryCake.Articles');
-        $this->Articles->addBehavior('Itosho/StrawberryCake.Insert');
+        $this->Articles = TableRegistry::get('Itosho/EasyQuery.Articles');
+        $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
     }
 
     public function tearDown()

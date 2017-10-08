@@ -1,6 +1,6 @@
 <?php
 
-namespace Itosho\StrawberryCake\Test\TestCase\Model\Behavior;
+namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
@@ -12,14 +12,14 @@ class UpsertBehaviorTest extends TestCase
      */
     public $Tags;
     public $fixtures = [
-        'plugin.Itosho/StrawberryCake.Tags'
+        'plugin.Itosho/EasyQuery.Tags'
     ];
 
     public function setUp()
     {
         parent::setUp();
-        $this->Tags = TableRegistry::get('Itosho/StrawberryCake.Tags');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+        $this->Tags = TableRegistry::get('Itosho/EasyQuery.Tags');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name'],
             'updateColumns' => ['description', 'modified']
         ]);
@@ -99,7 +99,7 @@ class UpsertBehaviorTest extends TestCase
     public function testUpsertInvalidUpdateColumnsConfig()
     {
         $this->Tags->removeBehavior('Upsert');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name']
         ]);
 
@@ -120,7 +120,7 @@ class UpsertBehaviorTest extends TestCase
     public function testUpsertInvalidUniqueColumnsConfig()
     {
         $this->Tags->removeBehavior('Upsert');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified']
         ]);
 
@@ -137,7 +137,7 @@ class UpsertBehaviorTest extends TestCase
     public function testBulkUpsertByInsert()
     {
         $this->Tags->removeBehavior('Upsert');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified']
         ]);
 
@@ -174,7 +174,7 @@ class UpsertBehaviorTest extends TestCase
     public function testBulkUpsertByUpdate()
     {
         $this->Tags->removeBehavior('Upsert');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified']
         ]);
 
@@ -217,7 +217,7 @@ class UpsertBehaviorTest extends TestCase
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
         $this->Tags->removeBehavior('Upsert');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert');
 
         $now = '2017-09-01 00:00:00';
         $data = [
@@ -252,7 +252,7 @@ class UpsertBehaviorTest extends TestCase
     public function testBulkUpsertNoSaveData()
     {
         $this->Tags->removeBehavior('Upsert');
-        $this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified']
         ]);
 

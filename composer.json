@@ -1,5 +1,5 @@
 {
-  "name": "itosho/strawberry-cake",
+  "name": "itosho/easy-query",
   "description": "CakePHP behavior plugin for easily some complicated queries like upsert, bulk upsert and bulk insert.",
   "type": "cakephp-plugin",
   "keywords": [
@@ -10,7 +10,7 @@
     "bulk",
     "insert"
   ],
-  "homepage": "https://github.com/itosho/strawberry-cake",
+  "homepage": "https://github.com/itosho/easy-query",
   "license": "MIT",
   "authors": [
     {
@@ -20,8 +20,8 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/itosho/strawberry-cake/issues",
-    "source": "https://github.com/itosho/strawberry-cake"
+    "issues": "https://github.com/itosho/easy-query/issues",
+    "source": "https://github.com/itosho/easy-query"
   },
   "require": {
     "cakephp/orm": "3.5.*"
@@ -32,12 +32,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Itosho\\StrawberryCake\\": "src"
+      "Itosho\\EasyQuery\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Itosho\\StrawberryCake\\Test\\": "tests"
+      "Itosho\\EasyQuery\\Test\\": "tests"
     }
   }
 }
