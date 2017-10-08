@@ -2,6 +2,11 @@
 
 CakePHP behavior plugin for easily some complicated queries like upsert, bulk upsert and bulk insert.
 
+[![Build Status](https://travis-ci.org/itosho/easy-query.svg?branch=master)](https://travis-ci.org/itosho/easy-query)
+[![codecov](https://codecov.io/gh/itosho/easy-query/branch/master/graph/badge.svg)](https://codecov.io/gh/itosho/easy-query)
+[![Total Downloads](https://poser.pugx.org/itosho/easy-query/downloads)](https://packagist.org/packages/itosho/easy-query)
+[![License](https://poser.pugx.org/itosho/easy-query/license)](https://packagist.org/packages/itosho/easy-query)
+
 ## Requirements
 
 - PHP 7.0+
