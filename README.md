@@ -1,10 +1,5 @@
 # Easy Query
 
-[![Build Status](https://travis-ci.org/itosho/strawberry-cake.svg?branch=master)](https://travis-ci.org/itosho/strawberry-cake)
-[![codecov](https://codecov.io/gh/itosho/strawberry-cake/branch/master/graph/badge.svg)](https://codecov.io/gh/itosho/strawberry-cake)
-[![Total Downloads](https://poser.pugx.org/itosho/strawberry-cake/downloads)](https://packagist.org/packages/itosho/strawberry-cake)
-[![License](https://poser.pugx.org/itosho/strawberry-cake/license)](https://packagist.org/packages/itosho/strawberry-cake)
-
 CakePHP behavior plugin for easily some complicated queries like upsert, bulk upsert and bulk insert.
 
 ## Requirements
@@ -16,7 +11,7 @@ CakePHP behavior plugin for easily some complicated queries like upsert, bulk up
 ## Installation
 
 ```bash
-composer require itosho/strawberry-cake
+composer require itosho/easy-query
 ```
 
 ## Usage
@@ -25,7 +20,7 @@ composer require itosho/strawberry-cake
 
 ```php
 $this->Tags = TableRegistry::get('Tags');
-$this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+$this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
     'uniqueColumns' => ['name'],
     'updateColumns' => ['description', 'modified']
 ]);
@@ -44,7 +39,7 @@ $this->Tags->upsert($entity);
 
 ```php
 $this->Tags = TableRegistry::get('Tags');
-$this->Tags->addBehavior('Itosho/StrawberryCake.Upsert', [
+$this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
     'updateColumns' => ['description', 'modified']
 ]);
 
@@ -70,7 +65,7 @@ $this->Tags->bulkUpsert($entities);
 
 ```php
 $this->Articles = TableRegistry::get('Articles');
-$this->Articles->addBehavior('Itosho/StrawberryCake.Insert');
+$this->Articles->addBehavior('Itosho/EasyQuery.Insert');
 
 $data = [
     [
@@ -94,7 +89,7 @@ $this->Articles->bulkInsert($entities);
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/itosho/strawberry-cake.
+Bug reports and pull requests are welcome on GitHub at https://github.com/itosho/easy-query.
 
 ## License
 
