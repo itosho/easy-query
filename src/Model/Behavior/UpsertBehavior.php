@@ -29,6 +29,7 @@ class UpsertBehavior extends Behavior
             throw new LogicException('config uniqueColumns is invalid.');
         }
 
+        $entity->setVirtual([]);
         $upsertData = $entity->toArray();
         $fields = array_keys($upsertData);
 
@@ -78,6 +79,7 @@ class UpsertBehavior extends Behavior
 
         $saveData = [];
         foreach ($entities as $entity) {
+            $entity->setVirtual([]);
             $saveData[] = $entity->toArray();
         }
 
