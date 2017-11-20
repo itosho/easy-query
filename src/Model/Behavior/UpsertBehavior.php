@@ -66,7 +66,7 @@ class UpsertBehavior extends Behavior
     /**
      * execute bulk upsert query
      *
-     * @param array $entities upsert entities
+     * @param \Cake\ORM\Entity[] $entities upsert entities
      *
      * @return \Cake\Database\StatementInterface query result
      */
