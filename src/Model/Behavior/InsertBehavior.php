@@ -18,6 +18,7 @@ class InsertBehavior extends Behavior
     {
         $saveData = [];
         foreach ($entities as $entity) {
+            $entity->setVirtual([]);
             $saveData[] = $entity->toArray();
         }
 
