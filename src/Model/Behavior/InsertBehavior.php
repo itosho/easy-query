@@ -10,7 +10,7 @@ class InsertBehavior extends Behavior
     /**
      * execute bulk insert query
      *
-     * @param array $entities insert entities
+     * @param \Cake\ORM\Entity[] $entities insert entities
      *
      * @return \Cake\Database\StatementInterface query result
      */
