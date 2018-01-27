@@ -164,6 +164,8 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertByUpdateAddTimestamp()
     {
+        $this->Tags->addBehavior('Timestamp');
+
         $record = [
             'name' => 'tag1',
             'description' => 'brand new tag1 description'
