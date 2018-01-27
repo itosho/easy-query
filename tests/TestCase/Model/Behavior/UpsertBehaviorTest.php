@@ -2,6 +2,7 @@
 
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
+use Cake\Chronos\Chronos;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -53,21 +54,19 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertByInsert()
     {
-        $data = [
-            'name' => 'tag4',
-            'description' => 'tag4 description',
-            'created' => '2017-09-01 00:00:00',
-            'modified' => '2017-09-01 00:00:00'
-        ];
-        $entity = $this->Tags->newEntity($data);
+        $record = $this->getBaseInsertRecord();
+        $now = Chronos::now();
+        $record['created'] = $now;
+        $record['modified'] = $now;
+        $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
 
-        $this->assertTrue($this->Tags->exists($data), 'fail insert.');
+        $this->assertTrue($this->Tags->exists($record), 'fail insert.');
 
         $insertId = 4;
         $this->assertSame($insertId, $actual->id, 'return invalid id.');
-        $this->assertSame($entity->body, $actual->body, 'return invalid body.');
-        $this->assertSame($entity->published, $actual->published, 'return invalid published.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
         $this->assertSame(
             $entity->created->toDateTimeString(),
             $actual->created->toDateTimeString(),
@@ -303,5 +302,41 @@ class UpsertBehaviorTest extends TestCase
         ]);
 
         $this->Tags->bulkUpsert([]);
+    }
+
+    /**
+     * get base insert record
+     *
+     * @return array
+     */
+    private function getBaseInsertRecord()
+    {
+        return [
+            'name' => 'tag4',
+            'description' => 'tag4 description'
+        ];
+    }
+
+    /**
+     * get base insert records
+     *
+     * @return array
+     */
+    private function getBaseInsertRecords()
+    {
+        return [
+            [
+                'name' => 'tag4',
+                'description' => 'tag4 description'
+            ],
+            [
+                'name' => 'tag5',
+                'description' => 'tag5 description'
+            ],
+            [
+                'name' => 'tag6',
+                'description' => 'tag6 description'
+            ]
+        ];
     }
 }
