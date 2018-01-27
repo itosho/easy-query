@@ -129,8 +129,6 @@ class InsertBehaviorTest extends TestCase
         $entities = $this->Articles->newEntities($records);
         $this->Articles->bulkInsert($entities);
 
-        $articles = $this->Articles->find()->all();
-
         foreach ($expectedRecords as $conditions) {
             $actual = $this->Articles->exists($conditions);
             $this->assertTrue($actual, 'fail insert.');

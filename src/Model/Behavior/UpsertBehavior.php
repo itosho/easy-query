@@ -18,7 +18,8 @@ class UpsertBehavior extends Behavior
      */
     protected $_defaultConfig = [
         'updateColumns' => null,
-        'uniqueColumns' => null
+        'uniqueColumns' => null,
+        'event' => ['beforeSave' => true]
     ];
 
     /**
@@ -37,6 +38,9 @@ class UpsertBehavior extends Behavior
             throw new LogicException('config uniqueColumns is invalid.');
         }
 
+        if ($this->_config['event']['beforeSave']) {
+            $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+        }
         $entity->setVirtual([]);
         $upsertData = $entity->toArray();
         $fields = array_keys($upsertData);
@@ -87,6 +91,9 @@ class UpsertBehavior extends Behavior
 
         $saveData = [];
         foreach ($entities as $entity) {
+            if ($this->_config['event']['beforeSave']) {
+                $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+            }
             $entity->setVirtual([]);
             $saveData[] = $entity->toArray();
         }
