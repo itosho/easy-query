@@ -54,10 +54,13 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertByInsert()
     {
-        $record = $this->getBaseInsertRecord();
         $now = Chronos::now();
-        $record['created'] = $now;
-        $record['modified'] = $now;
+        $record = [
+            'name' => 'tag4',
+            'description' => 'tag4 description',
+            'created' => $now,
+            'modified' => $now
+        ];
         $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
 
@@ -86,23 +89,23 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertByUpdate()
     {
-        $data = [
+        $record = [
             'name' => 'tag1',
             'description' => 'brand new tag1 description',
             'created' => '2017-10-01 00:00:00',
             'modified' => '2017-10-01 00:00:00'
         ];
-        $entity = $this->Tags->newEntity($data);
+        $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
         $currentCreated = '2017-09-01 00:00:00';
 
-        $data['created'] = $currentCreated;
-        $this->assertTrue($this->Tags->exists($data), 'fail update.');
+        $record['created'] = $currentCreated;
+        $this->assertTrue($this->Tags->exists($record), 'fail update.');
 
         $updateId = 1;
         $this->assertSame($updateId, $actual->id, 'return invalid id.');
-        $this->assertSame($entity->body, $actual->body, 'return invalid body.');
-        $this->assertSame($entity->published, $actual->published, 'return invalid published.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
         $this->assertSame(
             $currentCreated,
             $actual->created->toDateTimeString(),
