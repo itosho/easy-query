@@ -89,7 +89,7 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertByInsertAddTimestamp()
     {
-        $this->Articles->addBehavior('Timestamp');
+        $this->Tags->addBehavior('Timestamp');
 
         $record = [
             'name' => 'tag4',
