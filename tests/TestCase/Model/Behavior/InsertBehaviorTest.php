@@ -84,7 +84,7 @@ class InsertBehaviorTest extends TestCase
 
     private function getBaseInsertRecords()
     {
-        return  [
+        return [
             [
                 'title' => 'Fourth Article',
                 'body' => 'Fourth Article Body',
