@@ -2,19 +2,31 @@
 
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
+use Cake\Chronos\Chronos;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
+/**
+ * Itosho\EasyQuery\Model\Behavior\UpsertBehavior Test Case
+ */
 class UpsertBehaviorTest extends TestCase
 {
     /**
+     * TagsTable Class
+     *
      * @var \Cake\ORM\Table
      */
     public $Tags;
-    public $fixtures = [
-        'plugin.Itosho/EasyQuery.Tags'
-    ];
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = ['plugin.Itosho/EasyQuery.Tags'];
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp()
     {
         parent::setUp();
@@ -25,6 +37,9 @@ class UpsertBehaviorTest extends TestCase
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -32,23 +47,29 @@ class UpsertBehaviorTest extends TestCase
         unset($this->Tags);
     }
 
+    /**
+     * upsert() test by insert
+     *
+     * @return void
+     */
     public function testUpsertByInsert()
     {
-        $data = [
+        $now = Chronos::now();
+        $record = [
             'name' => 'tag4',
             'description' => 'tag4 description',
-            'created' => '2017-09-01 00:00:00',
-            'modified' => '2017-09-01 00:00:00'
+            'created' => $now,
+            'modified' => $now
         ];
-        $entity = $this->Tags->newEntity($data);
+        $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
 
-        $this->assertTrue($this->Tags->exists($data), 'fail insert.');
+        $this->assertTrue($this->Tags->exists($record), 'fail insert.');
 
         $insertId = 4;
         $this->assertSame($insertId, $actual->id, 'return invalid id.');
-        $this->assertSame($entity->body, $actual->body, 'return invalid body.');
-        $this->assertSame($entity->published, $actual->published, 'return invalid published.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
         $this->assertSame(
             $entity->created->toDateTimeString(),
             $actual->created->toDateTimeString(),
@@ -61,25 +82,69 @@ class UpsertBehaviorTest extends TestCase
         );
     }
 
+    /**
+     * upsert() test by insert add timestamp behavior
+     *
+     * @return void
+     */
+    public function testUpsertByInsertAddTimestamp()
+    {
+        $this->Tags->addBehavior('Timestamp');
+
+        $record = [
+            'name' => 'tag4',
+            'description' => 'tag4 description'
+        ];
+        $now = Chronos::now();
+        $expectedRecord = $record;
+        $expectedRecord['created'] = $now;
+        $expectedRecord['modified'] = $now;
+
+        $entity = $this->Tags->newEntity($record);
+        $actual = $this->Tags->upsert($entity);
+
+        $this->assertTrue($this->Tags->exists($expectedRecord), 'fail insert.');
+
+        $insertId = 4;
+        $this->assertSame($insertId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
+        $this->assertSame(
+            $entity->created->toDateTimeString(),
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
+    }
+
+    /**
+     * upsert() test by update
+     *
+     * @return void
+     */
     public function testUpsertByUpdate()
     {
-        $data = [
+        $record = [
             'name' => 'tag1',
             'description' => 'brand new tag1 description',
             'created' => '2017-10-01 00:00:00',
             'modified' => '2017-10-01 00:00:00'
         ];
-        $entity = $this->Tags->newEntity($data);
+        $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
         $currentCreated = '2017-09-01 00:00:00';
 
-        $data['created'] = $currentCreated;
-        $this->assertTrue($this->Tags->exists($data), 'fail update.');
+        $record['created'] = $currentCreated;
+        $this->assertTrue($this->Tags->exists($record), 'fail update.');
 
         $updateId = 1;
         $this->assertSame($updateId, $actual->id, 'return invalid id.');
-        $this->assertSame($entity->body, $actual->body, 'return invalid body.');
-        $this->assertSame($entity->published, $actual->published, 'return invalid published.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
         $this->assertSame(
             $currentCreated,
             $actual->created->toDateTimeString(),
@@ -93,8 +158,87 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test by update add timestamp behavior
+     *
+     * @return void
+     */
+    public function testUpsertByUpdateAddTimestamp()
+    {
+        $this->Tags->addBehavior('Timestamp');
+
+        $record = [
+            'name' => 'tag1',
+            'description' => 'brand new tag1 description'
+        ];
+        $now = Chronos::now();
+        $currentCreated = '2017-09-01 00:00:00';
+        $expectedRecord = $record;
+        $expectedRecord['created'] = $currentCreated;
+        $expectedRecord['modified'] = $now;
+
+        $entity = $this->Tags->newEntity($record);
+        $actual = $this->Tags->upsert($entity);
+
+        $this->assertTrue($this->Tags->exists($expectedRecord), 'fail update.');
+
+        $updateId = 1;
+        $this->assertSame($updateId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
+        $this->assertSame(
+            $currentCreated,
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
+    }
+
+    /**
+     * upsert() test beforeSave not dispatched
+     *
+     * @return void
+     */
+    public function testUpsertNoBeforeSave()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'uniqueColumns' => ['name'],
+            'updateColumns' => ['description', 'modified'],
+            'event' => ['beforeSave' => false]
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $record = [
+            'name' => 'tag4',
+            'description' => 'tag4 description'
+        ];
+        $expectedRecord = $record;
+        $expectedRecord['created IS'] = null;
+        $expectedRecord['modified IS'] = null;
+
+        $entity = $this->Tags->newEntity($record);
+        $actual = $this->Tags->upsert($entity);
+
+        $this->assertTrue($this->Tags->exists($expectedRecord), 'fail insert.');
+
+        $insertId = 4;
+        $this->assertSame($insertId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
+        $this->assertSame($entity->created, $actual->created, 'return invalid created.');
+        $this->assertSame($entity->modified, $actual->modified, 'return invalid modified.');
+    }
+
+    /**
+     * upsert() test when invalid update columns
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage config updateColumns is invalid.
+     * @return void
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
@@ -114,8 +258,11 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test when invalid unique columns
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage config uniqueColumns is invalid.
+     * @return void
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
@@ -134,6 +281,11 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->upsert($entity);
     }
 
+    /**
+     * bulkUpsert() test by insert
+     *
+     * @return void
+     */
     public function testBulkUpsertByInsert()
     {
         $this->Tags->removeBehavior('Upsert');
@@ -141,36 +293,57 @@ class UpsertBehaviorTest extends TestCase
             'updateColumns' => ['description', 'modified']
         ]);
 
-        $now = '2017-09-01 00:00:00';
-        $data = [
-            [
-                'name' => 'tag4',
-                'description' => 'tag4 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag5',
-                'description' => 'tag5 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag6',
-                'description' => 'tag6 description',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
-        $entities = $this->Tags->newEntities($data);
+        $records = $this->getBaseInsertRecords();
+        $now = Chronos::now();
+        foreach ($records as $key => $val) {
+            $records[$key]['created'] = $now;
+            $records[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
         $this->Tags->bulkUpsert($entities);
 
-        foreach ($data as $conditions) {
+        foreach ($records as $conditions) {
             $actual = $this->Tags->exists($conditions);
             $this->assertTrue($actual, 'fail insert.');
         }
     }
 
+    /**
+     * bulkUpsert() test by insert add timestamp behavior
+     *
+     * @return void
+     */
+    public function testBulkUpsertByInsertAddTimestamp()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'updateColumns' => ['description', 'modified']
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $records = $this->getBaseInsertRecords();
+        $now = Chronos::now();
+        $expectedRecords = $records;
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created'] = $now;
+            $expectedRecords[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
+        $this->Tags->bulkUpsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
+            $actual = $this->Tags->exists($conditions);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+    }
+
+    /**
+     * bulkUpsert() test by update
+     *
+     * @return void
+     */
     public function testBulkUpsertByUpdate()
     {
         $this->Tags->removeBehavior('Upsert');
@@ -178,32 +351,18 @@ class UpsertBehaviorTest extends TestCase
             'updateColumns' => ['description', 'modified']
         ]);
 
-        $now = '2017-10-01 00:00:00';
-        $data = [
-            [
-                'name' => 'tag1',
-                'description' => 'brand new tag1 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag2',
-                'description' => 'brand new tag2 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag3',
-                'description' => 'brand new tag3 description',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
-        $entities = $this->Tags->newEntities($data);
+        $records = $this->getBaseUpdateRecords();
+        $now = Chronos::now();
+        foreach ($records as $key => $val) {
+            $records[$key]['created'] = $now;
+            $records[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
         $this->Tags->bulkUpsert($entities);
 
         $currentCreated = '2017-09-01 00:00:00';
-        foreach ($data as $conditions) {
+        foreach ($records as $conditions) {
             $conditions['created'] = $currentCreated;
             $actual = $this->Tags->exists($conditions);
             $this->assertTrue($actual, 'fail update.');
@@ -211,43 +370,95 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkUpsert() test by update add timestamp behavior
+     *
+     * @return void
+     */
+    public function testBulkUpsertByUpdateAddTimestamp()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'updateColumns' => ['description', 'modified']
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $records = $this->getBaseUpdateRecords();
+        $now = Chronos::now();
+        $currentCreated = '2017-09-01 00:00:00';
+        $expectedRecords = $records;
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created'] = $currentCreated;
+            $expectedRecords[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
+        $this->Tags->bulkUpsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
+            $actual = $this->Tags->exists($conditions);
+            $this->assertTrue($actual, 'fail update.');
+        }
+    }
+
+    /**
+     * bulkUpsert() test beforeSave not dispatched
+     *
+     * @return void
+     */
+    public function testBulkUpsertNoBeforeSave()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'updateColumns' => ['description', 'modified'],
+            'event' => ['beforeSave' => false]
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $records = $this->getBaseInsertRecords();
+        $expectedRecords = $records;
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created IS'] = null;
+            $expectedRecords[$key]['modified IS'] = null;
+        }
+
+        $entities = $this->Tags->newEntities($records);
+        $this->Tags->bulkUpsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
+            $actual = $this->Tags->exists($conditions);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+    }
+
+    /**
+     * bulkUpsert() test when invalid update columns
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage config updateColumns is invalid.
+     * @return void
      */
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert');
 
-        $now = '2017-09-01 00:00:00';
-        $data = [
-            [
-                'name' => 'tag4',
-                'description' => 'tag4 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag5',
-                'description' => 'tag5 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag6',
-                'description' => 'tag6 description',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
+        $records = $this->getBaseInsertRecords();
+        $now = Chronos::now();
+        foreach ($records as $key => $val) {
+            $records[$key]['created'] = $now;
+            $records[$key]['modified'] = $now;
+        }
 
-        $entities = $this->Tags->newEntities($data);
+        $entities = $this->Tags->newEntities($records);
         $this->Tags->bulkUpsert($entities);
     }
 
     /**
+     * bulkUpsert() test by no data
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage entities has no save data.
+     * @return void
      */
     public function testBulkUpsertNoSaveData()
     {
@@ -257,5 +468,51 @@ class UpsertBehaviorTest extends TestCase
         ]);
 
         $this->Tags->bulkUpsert([]);
+    }
+
+    /**
+     * get base insert records
+     *
+     * @return array
+     */
+    private function getBaseInsertRecords()
+    {
+        return [
+            [
+                'name' => 'tag4',
+                'description' => 'tag4 description'
+            ],
+            [
+                'name' => 'tag5',
+                'description' => 'tag5 description'
+            ],
+            [
+                'name' => 'tag6',
+                'description' => 'tag6 description'
+            ]
+        ];
+    }
+
+    /**
+     * get base update records
+     *
+     * @return array
+     */
+    private function getBaseUpdateRecords()
+    {
+        return [
+            [
+                'name' => 'tag1',
+                'description' => 'brand new tag1 description'
+            ],
+            [
+                'name' => 'tag2',
+                'description' => 'brand new tag2 description'
+            ],
+            [
+                'name' => 'tag3',
+                'description' => 'brand new tag3 description'
+            ]
+        ];
     }
 }

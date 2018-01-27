@@ -6,18 +6,27 @@ use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use LogicException;
 
+/**
+ * Upsert Behavior
+ */
 class UpsertBehavior extends Behavior
 {
+    /**
+     * Default config
+     *
+     * @var array
+     */
     protected $_defaultConfig = [
         'updateColumns' => null,
-        'uniqueColumns' => null
+        'uniqueColumns' => null,
+        'event' => ['beforeSave' => true]
     ];
 
     /**
      * execute upsert query
      *
      * @param \Cake\ORM\Entity $entity upsert entity
-     *
+     * @throws LogicException invalid config
      * @return \Cake\Datasource\EntityInterface|array|null result entity
      */
     public function upsert(Entity $entity)
@@ -29,6 +38,9 @@ class UpsertBehavior extends Behavior
             throw new LogicException('config uniqueColumns is invalid.');
         }
 
+        if ($this->_config['event']['beforeSave']) {
+            $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+        }
         $entity->setVirtual([]);
         $upsertData = $entity->toArray();
         $fields = array_keys($upsertData);
@@ -68,7 +80,7 @@ class UpsertBehavior extends Behavior
      * execute bulk upsert query
      *
      * @param \Cake\ORM\Entity[] $entities upsert entities
-     *
+     * @throws LogicException invalid config or no save data
      * @return \Cake\Database\StatementInterface query result
      */
     public function bulkUpsert(array $entities)
@@ -79,6 +91,9 @@ class UpsertBehavior extends Behavior
 
         $saveData = [];
         foreach ($entities as $entity) {
+            if ($this->_config['event']['beforeSave']) {
+                $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+            }
             $entity->setVirtual([]);
             $saveData[] = $entity->toArray();
         }
