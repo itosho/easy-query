@@ -49,7 +49,7 @@ class InsertBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testBulkUpsert()
+    public function testBulkInsert()
     {
         $records = $this->getBaseInsertRecords();
         $now = Chronos::now();
@@ -72,18 +72,14 @@ class InsertBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testBulkUpsertAddTimestamp()
+    public function testBulkInsertAddTimestamp()
     {
-        $this->Articles->removeBehavior('Insert');
-        $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
-            'event' => ['beforeSave' => true]
-        ]);
         $this->Articles->addBehavior('Timestamp');
 
         $records = $this->getBaseInsertRecords();
         $customNow = '2017-01-01 00:00:00';
         $records[0]['created'] = $customNow;
-        $records[1]['modified'] = $customNow;
+        $records[0]['modified'] = $customNow;
 
         $expectedRecords = $this->getBaseInsertRecords();
         $now = Chronos::now();
@@ -102,13 +98,46 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkInsert() test beforeSave not dispatched
+     *
+     * @return void
+     */
+    public function testBulkInsertNoBeforeSave()
+    {
+        $this->Articles->removeBehavior('Insert');
+        $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
+            'event' => ['beforeSave' => false]
+        ]);
+        $this->Articles->addBehavior('Timestamp');
+
+        $records = $this->getBaseInsertRecords();
+        $customNow = '2017-01-01 00:00:00';
+        $records[0]['created'] = $customNow;
+        $records[0]['modified'] = $customNow;
+
+        $expectedRecords = $this->getBaseInsertRecords();
+        foreach ($expectedRecords as $expectedRecord) {
+            $expectedRecord['created'] = '';
+            $expectedRecord['modified'] = '';
+        }
+
+        $entities = $this->Articles->newEntities($records);
+        $this->Articles->bulkInsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
+            $actual = $this->Articles->exists($conditions);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+    }
+
+    /**
      * bulkInsert() test by no data
      *
      * @expectedException \LogicException
      * @expectedExceptionMessage entities has no save data.
      * @return void
      */
-    public function testBulkUpsertNoSaveData()
+    public function testBulkInsertNoSaveData()
     {
         $this->Articles->bulkInsert([]);
     }

@@ -16,7 +16,7 @@ class InsertBehavior extends Behavior
      * @var array
      */
     protected $_defaultConfig = [
-        'event' => ['beforeSave' => false]
+        'event' => ['beforeSave' => true]
     ];
 
     /**
