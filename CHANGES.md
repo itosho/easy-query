@@ -1,13 +1,15 @@
 # CHANGES
 
 ## v1.1.0
-- Add event config dispatch beforeSave event.
+- :wrench: Add event config dispatch beforeSave event.
+- :memo: support CHANGES.
 
 ## v1.0.1
-- Reset virtualProperties.
-- Improve PHPDoc.
+- :lipstick: Reset virtualProperties.
+- :speech_balloon: Improve PHPDoc.
 
 ## v1.0.0
-- Add bulk insert feature.
-- Add upsert feature.
-- Add bulk upsert feature.
+- :tada: Release Stable version.
+- :sparkles: Add bulk insert feature.
+- :sparkles: Add upsert feature.
+- :sparkles: Add bulk upsert feature.
