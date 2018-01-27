@@ -315,33 +315,50 @@ class UpsertBehaviorTest extends TestCase
             'updateColumns' => ['description', 'modified']
         ]);
 
-        $now = '2017-10-01 00:00:00';
-        $data = [
-            [
-                'name' => 'tag1',
-                'description' => 'brand new tag1 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag2',
-                'description' => 'brand new tag2 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag3',
-                'description' => 'brand new tag3 description',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
-        $entities = $this->Tags->newEntities($data);
+        $records = $this->getBaseUpdateRecords();
+        $now = Chronos::now();
+        foreach ($records as $key => $val) {
+            $records[$key]['created'] = $now;
+            $records[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
         $this->Tags->bulkUpsert($entities);
 
         $currentCreated = '2017-09-01 00:00:00';
-        foreach ($data as $conditions) {
+        foreach ($records as $conditions) {
             $conditions['created'] = $currentCreated;
+            $actual = $this->Tags->exists($conditions);
+            $this->assertTrue($actual, 'fail update.');
+        }
+    }
+
+    /**
+     * bulkUpsert() test by update add timestamp behavior
+     *
+     * @return void
+     */
+    public function testBulkUpsertByUpdateAddTimestamp()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'updateColumns' => ['description', 'modified']
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $records = $this->getBaseUpdateRecords();
+        $now = Chronos::now();
+        $currentCreated = '2017-10-01 00:00:00';
+        $expectedRecords = $records;
+        foreach ($records as $key => $val) {
+            $expectedRecords[$key]['created'] = $currentCreated;
+            $expectedRecords[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
+        $this->Tags->bulkUpsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
             $actual = $this->Tags->exists($conditions);
             $this->assertTrue($actual, 'fail update.');
         }
@@ -359,29 +376,14 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert');
 
-        $now = '2017-09-01 00:00:00';
-        $data = [
-            [
-                'name' => 'tag4',
-                'description' => 'tag4 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag5',
-                'description' => 'tag5 description',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'name' => 'tag6',
-                'description' => 'tag6 description',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
+        $records = $this->getBaseInsertRecords();
+        $now = Chronos::now();
+        foreach ($records as $key => $val) {
+            $records[$key]['created'] = $now;
+            $records[$key]['modified'] = $now;
+        }
 
-        $entities = $this->Tags->newEntities($data);
+        $entities = $this->Tags->newEntities($records);
         $this->Tags->bulkUpsert($entities);
     }
 
@@ -421,6 +423,29 @@ class UpsertBehaviorTest extends TestCase
             [
                 'name' => 'tag6',
                 'description' => 'tag6 description'
+            ]
+        ];
+    }
+
+    /**
+     * get base update records
+     *
+     * @return array
+     */
+    private function getBaseUpdateRecords()
+    {
+        return [
+            [
+                'name' => 'tag1',
+                'description' => 'brand new tag1 description'
+            ],
+            [
+                'name' => 'tag2',
+                'description' => 'brand new tag2 description'
+            ],
+            [
+                'name' => 'tag3',
+                'description' => 'brand new tag3 description'
             ]
         ];
     }
