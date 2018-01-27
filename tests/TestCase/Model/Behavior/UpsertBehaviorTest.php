@@ -229,16 +229,8 @@ class UpsertBehaviorTest extends TestCase
         $this->assertSame($insertId, $actual->id, 'return invalid id.');
         $this->assertSame($entity->name, $actual->name, 'return invalid name.');
         $this->assertSame($entity->description, $actual->description, 'return invalid description.');
-        $this->assertSame(
-            $entity->created->toDateTimeString(),
-            $actual->created->toDateTimeString(),
-            'return invalid created.'
-        );
-        $this->assertSame(
-            $entity->modified->toDateTimeString(),
-            $actual->modified->toDateTimeString(),
-            'return invalid modified.'
-        );
+        $this->assertSame($entity->created, $actual->created, 'return invalid created.');
+        $this->assertSame($entity->modified, $actual->modified, 'return invalid modified.');
     }
 
     /**
