@@ -83,6 +83,45 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test by insert add timestamp behavior
+     *
+     * @return void
+     */
+    public function testUpsertByInsertAddTimestamp()
+    {
+        $this->Articles->addBehavior('Timestamp');
+
+        $record = [
+            'name' => 'tag4',
+            'description' => 'tag4 description'
+        ];
+        $now = Chronos::now();
+        $expectedRecord = $record;
+        $expectedRecord['created'] = $now;
+        $expectedRecord['modified'] = $now;
+
+        $entity = $this->Tags->newEntity($record);
+        $actual = $this->Tags->upsert($entity);
+
+        $this->assertTrue($this->Tags->exists($expectedRecord), 'fail insert.');
+
+        $insertId = 4;
+        $this->assertSame($insertId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
+        $this->assertSame(
+            $entity->created->toDateTimeString(),
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
+    }
+
+    /**
      * upsert() test by update
      *
      * @return void
