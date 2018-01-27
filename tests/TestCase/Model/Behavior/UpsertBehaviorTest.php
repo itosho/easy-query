@@ -204,6 +204,12 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertNoBeforeSave()
     {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'uniqueColumns' => ['name'],
+            'updateColumns' => ['description', 'modified'],
+            'event' => ['beforeSave' => false]
+        ]);
         $this->Tags->addBehavior('Timestamp');
 
         $record = [
