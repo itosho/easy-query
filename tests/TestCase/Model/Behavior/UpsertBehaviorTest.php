@@ -288,6 +288,36 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkUpsert() test by insert add timestamp behavior
+     *
+     * @return void
+     */
+    public function testBulkUpsertByInsertAddTimestamp()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'updateColumns' => ['description', 'modified']
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $records = $this->getBaseInsertRecords();
+        $now = Chronos::now();
+        $expectedRecords = $records;
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created'] = $now;
+            $expectedRecords[$key]['modified'] = $now;
+        }
+
+        $entities = $this->Tags->newEntities($records);
+        $this->Tags->bulkUpsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
+            $actual = $this->Tags->exists($conditions);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+    }
+
+    /**
      * bulkUpsert() test by update
      *
      * @return void
@@ -384,19 +414,6 @@ class UpsertBehaviorTest extends TestCase
         ]);
 
         $this->Tags->bulkUpsert([]);
-    }
-
-    /**
-     * get base insert record
-     *
-     * @return array
-     */
-    private function getBaseInsertRecord()
-    {
-        return [
-            'name' => 'tag4',
-            'description' => 'tag4 description'
-        ];
     }
 
     /**
