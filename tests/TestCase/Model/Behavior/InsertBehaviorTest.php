@@ -6,16 +6,25 @@ use Cake\Chronos\Chronos;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
+/**
+ * Itosho\EasyQuery\Model\Behavior\InsertBehavior Test Case
+ */
 class InsertBehaviorTest extends TestCase
 {
     /**
      * @var \Cake\ORM\Table
      */
     public $Articles;
-    public $fixtures = [
-        'plugin.Itosho/EasyQuery.Articles'
-    ];
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = ['plugin.Itosho/EasyQuery.Articles'];
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp()
     {
         parent::setUp();
@@ -23,6 +32,9 @@ class InsertBehaviorTest extends TestCase
         $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -30,6 +42,11 @@ class InsertBehaviorTest extends TestCase
         unset($this->Articles);
     }
 
+    /**
+     * bulkInsert() test
+     *
+     * @return void
+     */
     public function testBulkUpsert()
     {
         $records = $this->getBaseInsertRecords();
@@ -48,6 +65,11 @@ class InsertBehaviorTest extends TestCase
         }
     }
 
+    /**
+     * bulkInsert() test add timestamp behavior
+     *
+     * @return void
+     */
     public function testBulkUpsertAddTimestamp()
     {
         $this->Articles->removeBehavior('Insert');
@@ -78,14 +100,22 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkInsert() test by no data
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage entities has no save data.
+     * @return void
      */
     public function testBulkUpsertNoSaveData()
     {
         $this->Articles->bulkInsert([]);
     }
 
+    /**
+     * get base insert records
+     *
+     * @return array
+     */
     private function getBaseInsertRecords()
     {
         return [

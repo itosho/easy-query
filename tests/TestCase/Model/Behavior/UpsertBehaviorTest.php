@@ -5,16 +5,27 @@ namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
+/**
+ * Itosho\EasyQuery\Model\Behavior\UpsertBehavior Test Case
+ */
 class UpsertBehaviorTest extends TestCase
 {
     /**
+     * TagsTable Class
+     *
      * @var \Cake\ORM\Table
      */
     public $Tags;
-    public $fixtures = [
-        'plugin.Itosho/EasyQuery.Tags'
-    ];
+    /**
+     * Fixtures
+     *
+     * @var array
+     */
+    public $fixtures = ['plugin.Itosho/EasyQuery.Tags'];
 
+    /**
+     * {@inheritDoc}
+     */
     public function setUp()
     {
         parent::setUp();
@@ -25,6 +36,9 @@ class UpsertBehaviorTest extends TestCase
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function tearDown()
     {
         parent::tearDown();
@@ -32,6 +46,11 @@ class UpsertBehaviorTest extends TestCase
         unset($this->Tags);
     }
 
+    /**
+     * upsert() test by insert
+     *
+     * @return void
+     */
     public function testUpsertByInsert()
     {
         $data = [
@@ -61,6 +80,11 @@ class UpsertBehaviorTest extends TestCase
         );
     }
 
+    /**
+     * upsert() test by update
+     *
+     * @return void
+     */
     public function testUpsertByUpdate()
     {
         $data = [
@@ -93,8 +117,11 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test when invalid update columns
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage config updateColumns is invalid.
+     * @return void
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
@@ -114,8 +141,11 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test when invalid unique columns
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage config uniqueColumns is invalid.
+     * @return void
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
@@ -134,6 +164,11 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->upsert($entity);
     }
 
+    /**
+     * bulkUpsert() test by insert
+     *
+     * @return void
+     */
     public function testBulkUpsertByInsert()
     {
         $this->Tags->removeBehavior('Upsert');
@@ -171,6 +206,11 @@ class UpsertBehaviorTest extends TestCase
         }
     }
 
+    /**
+     * bulkUpsert() test by update
+     *
+     * @return void
+     */
     public function testBulkUpsertByUpdate()
     {
         $this->Tags->removeBehavior('Upsert');
@@ -211,8 +251,11 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkUpsert() test when invalid update columns
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage config updateColumns is invalid.
+     * @return void
      */
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
@@ -246,8 +289,11 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkUpsert() test by no data
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessage entities has no save data.
+     * @return void
      */
     public function testBulkUpsertNoSaveData()
     {
