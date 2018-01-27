@@ -53,9 +53,9 @@ class InsertBehaviorTest extends TestCase
     {
         $records = $this->getBaseInsertRecords();
         $now = Chronos::now();
-        foreach ($records as $record) {
-            $record['created'] = $now;
-            $record['modified'] = $now;
+        foreach ($records as $key => $val) {
+            $record[$key]['created'] = $now;
+            $record[$key]['modified'] = $now;
         }
 
         $entities = $this->Articles->newEntities($records);
@@ -83,10 +83,12 @@ class InsertBehaviorTest extends TestCase
 
         $expectedRecords = $this->getBaseInsertRecords();
         $now = Chronos::now();
-        foreach ($expectedRecords as $expectedRecord) {
-            $expectedRecord['created'] = $now;
-            $expectedRecord['modified'] = $now;
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created'] = $now;
+            $expectedRecords[$key]['modified'] = $now;
         }
+        $expectedRecords[0]['created'] = $customNow;
+        $expectedRecords[0]['modified'] = $customNow;
 
         $entities = $this->Articles->newEntities($records);
         $this->Articles->bulkInsert($entities);
@@ -108,7 +110,6 @@ class InsertBehaviorTest extends TestCase
         $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
             'event' => ['beforeSave' => false]
         ]);
-        $this->Articles->addBehavior('Timestamp');
 
         $records = $this->getBaseInsertRecords();
         $customNow = '2017-01-01 00:00:00';
@@ -116,13 +117,19 @@ class InsertBehaviorTest extends TestCase
         $records[0]['modified'] = $customNow;
 
         $expectedRecords = $this->getBaseInsertRecords();
-        foreach ($expectedRecords as $expectedRecord) {
-            $expectedRecord['created'] = '';
-            $expectedRecord['modified'] = '';
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created IS'] = null;
+            $expectedRecords[$key]['modified IS'] = null;
         }
+        unset($expectedRecords[0]['created IS']);
+        unset($expectedRecords[0]['modified IS']);
+        $expectedRecords[0]['created'] = $customNow;
+        $expectedRecords[0]['modified'] = $customNow;
 
         $entities = $this->Articles->newEntities($records);
         $this->Articles->bulkInsert($entities);
+
+        $articles = $this->Articles->find()->all();
 
         foreach ($expectedRecords as $conditions) {
             $actual = $this->Articles->exists($conditions);
