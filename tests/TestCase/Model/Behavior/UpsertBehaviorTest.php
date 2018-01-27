@@ -198,6 +198,44 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test beforeSave not dispatched
+     *
+     * @return void
+     */
+    public function testUpsertNoBeforeSave()
+    {
+        $this->Tags->addBehavior('Timestamp');
+
+        $record = [
+            'name' => 'tag4',
+            'description' => 'tag4 description'
+        ];
+        $expectedRecord = $record;
+        $expectedRecord['created IS'] = null;
+        $expectedRecord['modified IS'] = null;
+
+        $entity = $this->Tags->newEntity($record);
+        $actual = $this->Tags->upsert($entity);
+
+        $this->assertTrue($this->Tags->exists($expectedRecord), 'fail insert.');
+
+        $insertId = 4;
+        $this->assertSame($insertId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
+        $this->assertSame(
+            $entity->created->toDateTimeString(),
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
+    }
+
+    /**
      * upsert() test when invalid update columns
      *
      * @expectedException \LogicException
