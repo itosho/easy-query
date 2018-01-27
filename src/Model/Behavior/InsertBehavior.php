@@ -18,6 +18,7 @@ class InsertBehavior extends Behavior
     {
         $saveData = [];
         foreach ($entities as $entity) {
+            $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
             $entity->setVirtual([]);
             $saveData[] = $entity->toArray();
         }
