@@ -50,6 +50,10 @@ class InsertBehaviorTest extends TestCase
 
     public function testBulkUpsertAddTimestamp()
     {
+        $this->Articles->removeBehavior('Insert');
+        $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
+            'event' => ['beforeSave' => true]
+        ]);
         $this->Articles->addBehavior('Timestamp');
 
         $records = $this->getBaseInsertRecords();

@@ -7,6 +7,10 @@ use LogicException;
 
 class InsertBehavior extends Behavior
 {
+    protected $_defaultConfig = [
+        'event' => ['beforeSave' => false]
+    ];
+
     /**
      * execute bulk insert query
      *
@@ -18,7 +22,9 @@ class InsertBehavior extends Behavior
     {
         $saveData = [];
         foreach ($entities as $entity) {
-            $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+            if ($this->_config['event']['beforeSave']) {
+                $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+            }
             $entity->setVirtual([]);
             $saveData[] = $entity->toArray();
         }
