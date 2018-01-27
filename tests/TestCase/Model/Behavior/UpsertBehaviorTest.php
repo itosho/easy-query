@@ -401,6 +401,36 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * bulkUpsert() test beforeSave not dispatched
+     *
+     * @return void
+     */
+    public function testBulkUpsertNoBeforeSave()
+    {
+        $this->Tags->removeBehavior('Upsert');
+        $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
+            'updateColumns' => ['description', 'modified'],
+            'event' => ['beforeSave' => false]
+        ]);
+        $this->Tags->addBehavior('Timestamp');
+
+        $records = $this->getBaseInsertRecords();
+        $expectedRecords = $records;
+        foreach ($expectedRecords as $key => $val) {
+            $expectedRecords[$key]['created IS'] = null;
+            $expectedRecords[$key]['modified IS'] = null;
+        }
+
+        $entities = $this->Tags->newEntities($records);
+        $this->Tags->bulkUpsert($entities);
+
+        foreach ($expectedRecords as $conditions) {
+            $actual = $this->Tags->exists($conditions);
+            $this->assertTrue($actual, 'fail insert.');
+        }
+    }
+
+    /**
      * bulkUpsert() test when invalid update columns
      *
      * @expectedException \LogicException
