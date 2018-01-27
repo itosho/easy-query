@@ -12,6 +12,8 @@ use Cake\TestSuite\TestCase;
 class InsertBehaviorTest extends TestCase
 {
     /**
+     * ArticlesTable Class
+     *
      * @var \Cake\ORM\Table
      */
     public $Articles;
