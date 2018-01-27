@@ -158,6 +158,44 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
+     * upsert() test by update add timestamp behavior
+     *
+     * @return void
+     */
+    public function testUpsertByUpdateAddTimestamp()
+    {
+        $record = [
+            'name' => 'tag1',
+            'description' => 'brand new tag1 description'
+        ];
+        $now = Chronos::now();
+        $currentCreated = '2017-09-01 00:00:00';
+        $expectedRecord = $record;
+        $expectedRecord['created'] = $currentCreated;
+        $expectedRecord['modified'] = $now;
+
+        $entity = $this->Tags->newEntity($record);
+        $actual = $this->Tags->upsert($entity);
+
+        $this->assertTrue($this->Tags->exists($expectedRecord), 'fail update.');
+
+        $updateId = 1;
+        $this->assertSame($updateId, $actual->id, 'return invalid id.');
+        $this->assertSame($entity->name, $actual->name, 'return invalid name.');
+        $this->assertSame($entity->description, $actual->description, 'return invalid description.');
+        $this->assertSame(
+            $currentCreated,
+            $actual->created->toDateTimeString(),
+            'return invalid created.'
+        );
+        $this->assertSame(
+            $entity->modified->toDateTimeString(),
+            $actual->modified->toDateTimeString(),
+            'return invalid modified.'
+        );
+    }
+
+    /**
      * upsert() test when invalid update columns
      *
      * @expectedException \LogicException
