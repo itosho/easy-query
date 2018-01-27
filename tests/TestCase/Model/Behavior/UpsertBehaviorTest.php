@@ -350,7 +350,7 @@ class UpsertBehaviorTest extends TestCase
         $now = Chronos::now();
         $currentCreated = '2017-10-01 00:00:00';
         $expectedRecords = $records;
-        foreach ($records as $key => $val) {
+        foreach ($expectedRecords as $key => $val) {
             $expectedRecords[$key]['created'] = $currentCreated;
             $expectedRecords[$key]['modified'] = $now;
         }
