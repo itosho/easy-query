@@ -32,34 +32,17 @@ class InsertBehaviorTest extends TestCase
 
     public function testBulkUpsert()
     {
+        $records = $this->getBaseInsertRecords();
         $now = Chronos::now();
-        $data = [
-            [
-                'title' => 'Fourth Article',
-                'body' => 'Fourth Article Body',
-                'published' => '1',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'title' => 'Fifth Article',
-                'body' => 'Fifth Article Body',
-                'published' => '1',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'title' => 'Sixth Article',
-                'body' => 'Sixth Article Body',
-                'published' => '1',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
-        $entities = $this->Articles->newEntities($data);
+        foreach ($records as $record) {
+            $record['created'] = $now;
+            $record['modified'] = $now;
+        }
+
+        $entities = $this->Articles->newEntities($records);
         $this->Articles->bulkInsert($entities);
 
-        foreach ($data as $conditions) {
+        foreach ($records as $conditions) {
             $actual = $this->Articles->exists($conditions);
             $this->assertTrue($actual, 'fail insert.');
         }
@@ -69,55 +52,22 @@ class InsertBehaviorTest extends TestCase
     {
         $this->Articles->addBehavior('Timestamp');
 
+        $records = $this->getBaseInsertRecords();
         $customNow = '2017-01-01 00:00:00';
-        $data = [
-            [
-                'title' => 'Fourth Article',
-                'body' => 'Fourth Article Body',
-                'published' => '1',
-                'created' => $customNow,
-                'modified' => $customNow
-            ],
-            [
-                'title' => 'Fifth Article',
-                'body' => 'Fifth Article Body',
-                'published' => '1'
-            ],
-            [
-                'title' => 'Sixth Article',
-                'body' => 'Sixth Article Body',
-                'published' => '1'
-            ]
-        ];
-        $now = Chronos::now();
-        $expected = [
-            [
-                'title' => 'Fourth Article',
-                'body' => 'Fourth Article Body',
-                'published' => '1',
-                'created' => $customNow,
-                'modified' => $customNow
-            ],
-            [
-                'title' => 'Fifth Article',
-                'body' => 'Fifth Article Body',
-                'published' => '1',
-                'created' => $now,
-                'modified' => $now
-            ],
-            [
-                'title' => 'Sixth Article',
-                'body' => 'Sixth Article Body',
-                'published' => '1',
-                'created' => $now,
-                'modified' => $now
-            ]
-        ];
+        $records[0]['created'] = $customNow;
+        $records[1]['modified'] = $customNow;
 
-        $entities = $this->Articles->newEntities($data);
+        $expectedRecords = $this->getBaseInsertRecords();
+        $now = Chronos::now();
+        foreach ($expectedRecords as $expectedRecord) {
+            $expectedRecord['created'] = $now;
+            $expectedRecord['modified'] = $now;
+        }
+
+        $entities = $this->Articles->newEntities($records);
         $this->Articles->bulkInsert($entities);
 
-        foreach ($expected as $conditions) {
+        foreach ($expectedRecords as $conditions) {
             $actual = $this->Articles->exists($conditions);
             $this->assertTrue($actual, 'fail insert.');
         }
@@ -130,5 +80,26 @@ class InsertBehaviorTest extends TestCase
     public function testBulkUpsertNoSaveData()
     {
         $this->Articles->bulkInsert([]);
+    }
+
+    private function getBaseInsertRecords()
+    {
+        return  [
+            [
+                'title' => 'Fourth Article',
+                'body' => 'Fourth Article Body',
+                'published' => 1
+            ],
+            [
+                'title' => 'Fifth Article',
+                'body' => 'Fifth Article Body',
+                'published' => 1
+            ],
+            [
+                'title' => 'Sixth Article',
+                'body' => 'Sixth Article Body',
+                'published' => 1
+            ]
+        ];
     }
 }
