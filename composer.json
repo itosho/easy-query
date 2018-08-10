@@ -24,10 +24,10 @@
     "source": "https://github.com/itosho/easy-query"
   },
   "require": {
-    "cakephp/orm": "3.5.*"
+    "cakephp/orm": "^3.5"
   },
   "require-dev": {
-    "cakephp/cakephp": "3.5.*",
+    "cakephp/cakephp": "^3.5",
     "phpunit/phpunit": "^5.7"
   },
   "autoload": {

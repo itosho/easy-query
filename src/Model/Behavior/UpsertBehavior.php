@@ -115,7 +115,7 @@ class UpsertBehavior extends Behavior
             ->query()
             ->insert($fields)
             ->epilog($expression);
-        $query->clause('values')->values($saveData);
+        $query->clause('values')->setValues($saveData);
 
         return $query->execute();
     }
