@@ -45,7 +45,7 @@ class InsertBehavior extends Behavior
         $query = $this->_table
             ->query()
             ->insert($fields);
-        $query->clause('values')->values($saveData);
+        $query->clause('values')->setValues($saveData);
 
         return $query->execute();
     }

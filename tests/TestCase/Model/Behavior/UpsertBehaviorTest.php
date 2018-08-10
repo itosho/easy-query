@@ -30,7 +30,7 @@ class UpsertBehaviorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->Tags = TableRegistry::get('Itosho/EasyQuery.Tags');
+        $this->Tags = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Tags');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name'],
             'updateColumns' => ['description', 'modified']
@@ -43,7 +43,7 @@ class UpsertBehaviorTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
         unset($this->Tags);
     }
 
