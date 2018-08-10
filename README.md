@@ -11,7 +11,7 @@ CakePHP behavior plugin for easily some complicated queries like upsert, bulk up
 ## Requirements
 
 - PHP 7.0+
-- CakePHP 3.5.0+
+- CakePHP 3.5+
 - MySQL 5.6+
 
 ## Installation
@@ -83,7 +83,7 @@ $entities = $this->Articles->newEntities($data);
 $this->Articles->bulkInsert($entities);
 ```
 
-### Notice from v1.1.0
+### Advanced 
 Need to use `Timestamp` behavior, if you want to update `created` and `modified` fields automatically.
 And you can change the action manually by using `event` config like this.
 
