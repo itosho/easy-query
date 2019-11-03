@@ -28,6 +28,11 @@ matrix:
     - php: 7.3
       env: PHPSTAN=1 DEFAULT=0
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 before_script:
   - if [[ $TRAVIS_PHP_VERSION != 7.3 ]]; then phpenv config-rm xdebug.ini; fi
 
