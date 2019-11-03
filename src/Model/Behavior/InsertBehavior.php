@@ -57,7 +57,7 @@ class InsertBehavior extends Behavior
     }
 
     /**
-     * execute insert select query for saving a record at once
+     * execute insert select query for saving a record just once
      *
      * @param Entity $entity insert entity
      * @param array|null $conditions search conditions
@@ -67,6 +67,12 @@ class InsertBehavior extends Behavior
     {
         if ($this->_config['event']['beforeSave']) {
             $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
+            if ($entity->created) {
+                $entity->created= $entity->created->toDateString();
+            }
+            if ($entity->modified) {
+                $entity->modified= $entity->modified->toDateString();
+            }
         }
 
         $entity->setVirtual([]);

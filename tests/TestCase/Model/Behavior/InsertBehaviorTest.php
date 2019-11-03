@@ -240,7 +240,11 @@ class InsertBehaviorTest extends TestCase
 
         $actual = $this->Articles
             ->find()
-            ->where($newData)
+            ->where( [
+                'title' => 'First Article',
+                'body IS' => null,
+                'published' => 1
+            ])
             ->all();
 
         $this->assertCount(1, $actual, 'fail insert once.');
