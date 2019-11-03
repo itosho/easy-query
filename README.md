@@ -1,6 +1,6 @@
 # Easy Query
 
-CakePHP behavior plugin for easily some complicated queries like upsert, bulk upsert and bulk insert.
+CakePHP behavior plugin for easily some complicated queries.
 
 [![Build Status](https://travis-ci.org/itosho/easy-query.svg?branch=master)](https://travis-ci.org/itosho/easy-query)
 [![codecov](https://codecov.io/gh/itosho/easy-query/branch/master/graph/badge.svg)](https://codecov.io/gh/itosho/easy-query)
@@ -81,6 +81,62 @@ $data = [
 ];
 $entities = $this->Articles->newEntities($data);
 $this->Articles->bulkInsert($entities);
+```
+
+### Insert Select
+For inserting a record just once.
+
+#### case1
+Specify search conditions.
+
+```php
+$this->Articles = TableRegistry::get('Articles');
+$this->Articles->addBehavior('Itosho/EasyQuery.Insert');
+
+$data = [
+    'title' => 'New Article?',
+    'body' => 'New Article Body?'
+];
+$entity = $this->Articles->newEntity($data);
+$condition = [
+    'title' => 'New Article?'
+];
+
+$this->Articles->insertOnce($entities);
+```
+
+Generated SQL is below.
+
+```sql
+INSERT INTO articles (title, body)
+SELECT 'New Article?', 'New Article Body?' FROM tmp WHERE NOT EXISTS (    
+    SELECT * FROM articles WHERE title = 'New Article?'
+)
+```
+
+#### case2
+Auto set search conditions with a inserting record.
+
+```php
+$this->Articles = TableRegistry::get('Articles');
+$this->Articles->addBehavior('Itosho/EasyQuery.Insert');
+
+$data = [
+    'title' => 'New Article',
+    'body' => 'New Article Body'
+];
+$entity = $this->Articles->newEntity($data);
+
+$this->Articles->insertOnce($entities);
+```
+
+Generated SQL is below.
+
+```sql
+INSERT INTO articles (title, body)
+SELECT 'New Article', 'New Article Body' FROM tmp WHERE NOT EXISTS (    
+    SELECT * FROM articles WHERE title = 'New Article' AND body = 'New Article Body'
+)
 ```
 
 ### Advanced 

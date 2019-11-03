@@ -1,14 +1,16 @@
 {
   "name": "itosho/easy-query",
-  "description": "CakePHP behavior plugin for easily some complicated queries like upsert, bulk upsert and bulk insert.",
+  "description": "CakePHP behavior plugin for easily some complicated queries.",
   "type": "cakephp-plugin",
   "keywords": [
     "cakephp",
     "behavior",
     "plugin",
     "upsert",
-    "bulk",
-    "insert"
+    "bulk upsert",
+    "bulk insert",
+    "insert select",
+    "insert once"
   ],
   "homepage": "https://github.com/itosho/easy-query",
   "license": "MIT",

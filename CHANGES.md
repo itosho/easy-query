@@ -1,7 +1,7 @@
 # CHANGES
 
 ## v1.2.0
-- :sparkles: Add insert select for inserting once feature.
+- :sparkles: Add insert select query for inserting a record just once.
 - :green_heart: Improve CI.
 
 ## v1.1.1

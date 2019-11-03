@@ -2,7 +2,6 @@
 
 namespace Itosho\EasyQuery\Model\Behavior;
 
-use App\Model\Entity\ResourceFormatterTrait;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\StatementInterface;
 use Cake\I18n\FrozenTime;
