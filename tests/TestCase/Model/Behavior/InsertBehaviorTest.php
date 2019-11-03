@@ -173,6 +173,32 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
+     * insertOnce() test add timestamp behavior
+     *
+     * @return void
+     */
+    public function testInsertOnceAddTimestampBehavior()
+    {
+        $this->Articles->addBehavior('Timestamp');
+
+        $newData = [
+            'title' => 'New Article',
+            'body' => 'New Article Body',
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($newData);
+        $now = Chronos::now();
+
+        $this->Articles->insertOnce($entity);
+
+        $newData['created'] = $now;
+        $newData['modified'] = $now;
+
+        $actual = $this->Articles->exists($newData);
+        $this->assertTrue($actual, 'fail insert.');
+    }
+
+    /**
      * insertOnce() test when duplicated
      *
      * @return void
