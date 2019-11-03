@@ -2,7 +2,9 @@
 
 namespace Itosho\EasyQuery\Model\Behavior;
 
+use Cake\Database\StatementInterface;
 use Cake\ORM\Behavior;
+use Cake\ORM\Entity;
 use LogicException;
 
 /**
@@ -22,9 +24,9 @@ class InsertBehavior extends Behavior
     /**
      * execute bulk insert query
      *
-     * @param \Cake\ORM\Entity[] $entities insert entities
+     * @param Entity[] $entities insert entities
      * @throws LogicException no save data
-     * @return \Cake\Database\StatementInterface query result
+     * @return StatementInterface query result
      */
     public function bulkInsert(array $entities)
     {
