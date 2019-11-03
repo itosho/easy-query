@@ -1,5 +1,9 @@
 # CHANGES
 
+## v1.2.0
+- :sparkles: Add insert select query for inserting a record just once.
+- :green_heart: Improve CI.
+
 ## v1.1.1
 - :up: Correspond to CakePHP 3.5 or higher version.
 - :green_heart: Improve CI.

@@ -3,6 +3,8 @@
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
 use Cake\Chronos\Chronos;
+use Cake\I18n\FrozenTime;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -14,7 +16,7 @@ class InsertBehaviorTest extends TestCase
     /**
      * ArticlesTable Class
      *
-     * @var \Cake\ORM\Table
+     * @var Table
      */
     public $Articles;
     /**
@@ -145,6 +147,169 @@ class InsertBehaviorTest extends TestCase
     public function testBulkInsertNoSaveData()
     {
         $this->Articles->bulkInsert([]);
+    }
+
+    /**
+     * insertOnce() test
+     *
+     * @return void
+     */
+    public function testInsertOnce()
+    {
+        $newData = [
+            'title' => 'New Article',
+            'body' => 'New Article Body',
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $this->Articles->insertOnce($entity);
+
+        $actual = $this->Articles
+            ->find()
+            ->where($newData)
+            ->all();
+
+        $this->assertCount(1, $actual, 'fail insert once.');
+    }
+
+    /**
+     * insertOnce() test add timestamp behavior
+     *
+     * @return void
+     */
+    public function testInsertOnceAddTimestampBehavior()
+    {
+        $this->Articles->addBehavior('Timestamp');
+
+        $newData = [
+            'title' => 'New Article',
+            'body' => 'New Article Body',
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($newData);
+        $now = FrozenTime::now();
+
+        $this->Articles->insertOnce($entity);
+
+        $newData['created'] = $now;
+        $newData['modified'] = $now;
+
+        $actual = $this->Articles->exists($newData);
+        $this->assertTrue($actual, 'fail insert.');
+    }
+
+    /**
+     * insertOnce() test when duplicated
+     *
+     * @return void
+     */
+    public function testInsertOnceWhenDuplicated()
+    {
+        $duplicatedData = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($duplicatedData);
+
+        $this->Articles->insertOnce($entity);
+
+        $actual = $this->Articles
+            ->find()
+            ->where($duplicatedData)
+            ->all();
+
+        $this->assertCount(1, $actual, 'fail insert once.');
+    }
+
+    /**
+     * insertOnce() test when is null
+     *
+     * @return void
+     */
+    public function testInsertOnceWhenIsNull()
+    {
+        $newData = [
+            'title' => 'First Article',
+            'body' => null,
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $this->Articles->insertOnce($entity);
+
+        $actual = $this->Articles
+            ->find()
+            ->where([
+                'title' => 'First Article',
+                'body IS' => null,
+                'published' => 1
+            ])
+            ->all();
+
+        $this->assertCount(1, $actual, 'fail insert once.');
+    }
+
+    /**
+     * insertOnce() test with conditions
+     *
+     * @return void
+     */
+    public function testInsertOnceWithConditions()
+    {
+        $newData = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+            'published' => 0
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $conditions = [
+            'title' => 'Brand New First Article',
+            'body' => 'Brand New First Article Body',
+        ];
+
+        $this->Articles->insertOnce($entity, $conditions);
+
+        $actual = $this->Articles
+            ->find()
+            ->where([
+                'title' => 'First Article',
+                'body' => 'First Article Body'
+            ])
+            ->all();
+
+        $this->assertCount(2, $actual, 'fail insert once.');
+    }
+
+    /**
+     * insertOnce() test when duplicated with conditions
+     *
+     * @return void
+     */
+    public function testInsertOnceWhenDuplicatedWithConditions()
+    {
+        $newData = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+            'published' => 0
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $conditions = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+        ];
+
+        $this->Articles->insertOnce($entity, $conditions);
+
+        $actual = $this->Articles
+            ->find()
+            ->where($conditions)
+            ->all();
+
+        $this->assertCount(1, $actual, 'fail insert once.');
     }
 
     /**

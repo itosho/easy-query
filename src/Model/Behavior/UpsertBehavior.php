@@ -2,6 +2,8 @@
 
 namespace Itosho\EasyQuery\Model\Behavior;
 
+use Cake\Database\StatementInterface;
+use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use LogicException;
@@ -25,9 +27,9 @@ class UpsertBehavior extends Behavior
     /**
      * execute upsert query
      *
-     * @param \Cake\ORM\Entity $entity upsert entity
+     * @param Entity $entity upsert entity
+     * @return EntityInterface|array|null result entity
      * @throws LogicException invalid config
-     * @return \Cake\Datasource\EntityInterface|array|null result entity
      */
     public function upsert(Entity $entity)
     {
@@ -79,9 +81,9 @@ class UpsertBehavior extends Behavior
     /**
      * execute bulk upsert query
      *
-     * @param \Cake\ORM\Entity[] $entities upsert entities
+     * @param Entity[] $entities upsert entities
+     * @return StatementInterface query result
      * @throws LogicException invalid config or no save data
-     * @return \Cake\Database\StatementInterface query result
      */
     public function bulkUpsert(array $entities)
     {
