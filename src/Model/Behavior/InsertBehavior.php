@@ -104,7 +104,7 @@ class InsertBehavior extends Behavior
      * build tmp table's select query for insert select query
      *
      * @param array $escapedData escaped array data
-     * @return Query tmp table's select query
+     * @return array|Query tmp table's select query
      */
     private function buildTmpTableSelectQuery($escapedData)
     {
