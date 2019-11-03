@@ -83,7 +83,7 @@ class UpsertBehavior extends Behavior
      *
      * @param Entity[] $entities upsert entities
      * @return StatementInterface query result
-     *@throws LogicException invalid config or no save data
+     * @throws LogicException invalid config or no save data
      */
     public function bulkUpsert(array $entities)
     {
