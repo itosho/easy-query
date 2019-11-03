@@ -104,7 +104,8 @@ class InsertBehavior extends Behavior
      * build tmp table's select query for insert select query
      *
      * @param array $escapedData escaped array data
-     * @return array|Query tmp table's select query
+     * @throws LogicException select query is invalid
+     * @return Query tmp table's select query
      */
     private function buildTmpTableSelectQuery($escapedData)
     {
@@ -126,6 +127,10 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
+
+        if (is_array($query)) {
+            throw new LogicException('select query is invalid.');
+        }
 
         return $query;
     }

@@ -149,6 +149,29 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
+     * insertOnece() test
+     *
+     * @return void
+     */
+    public function testInsertOnce()
+    {
+        $newData =  [
+            'title' => 'Fourth Article',
+            'body' => 'Fourth Article Body',
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $this->Articles->insertOnce($entity);
+
+        $actual = $this->Articles
+            ->find()
+            ->where($newData)
+            ->count();
+        $this->assertCount(1, $actual, 'fail insert once.');
+    }
+
+    /**
      * get base insert records
      *
      * @return array
