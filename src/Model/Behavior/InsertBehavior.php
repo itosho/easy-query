@@ -2,6 +2,7 @@
 
 namespace Itosho\EasyQuery\Model\Behavior;
 
+use App\Model\Entity\ResourceFormatterTrait;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\StatementInterface;
 use Cake\ORM\Behavior;
@@ -127,12 +128,10 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
+        /** @var Query $selectQuery */
+        $selectQuery = $query;
 
-        if (is_array($query)) {
-            throw new LogicException('select query is invalid.');
-        }
-
-        return $query;
+        return $selectQuery;
     }
 
     /**
