@@ -223,6 +223,30 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
+     * insertOnce() test when is null
+     *
+     * @return void
+     */
+    public function testInsertOnceWhenIsNull()
+    {
+        $newData = [
+            'title' => 'First Article',
+            'body' => null,
+            'published' => 1
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $this->Articles->insertOnce($entity);
+
+        $actual = $this->Articles
+            ->find()
+            ->where($newData)
+            ->all();
+
+        $this->assertCount(1, $actual, 'fail insert once.');
+    }
+
+    /**
      * insertOnce() test with conditions
      *
      * @return void
@@ -236,12 +260,12 @@ class InsertBehaviorTest extends TestCase
         ];
         $entity = $this->Articles->newEntity($newData);
 
-        $condition = [
+        $conditions = [
             'title' => 'Brand New First Article',
             'body' => 'Brand New First Article Body',
         ];
 
-        $this->Articles->insertOnce($entity, $condition);
+        $this->Articles->insertOnce($entity, $conditions);
 
         $actual = $this->Articles
             ->find()
@@ -268,16 +292,16 @@ class InsertBehaviorTest extends TestCase
         ];
         $entity = $this->Articles->newEntity($newData);
 
-        $condition = [
+        $conditions = [
             'title' => 'First Article',
             'body' => 'First Article Body',
         ];
 
-        $this->Articles->insertOnce($entity, $condition);
+        $this->Articles->insertOnce($entity, $conditions);
 
         $actual = $this->Articles
             ->find()
-            ->where($condition)
+            ->where($conditions)
             ->all();
 
         $this->assertCount(1, $actual, 'fail insert once.');
