@@ -3,6 +3,7 @@
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
 use Cake\Chronos\Chronos;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
@@ -187,7 +188,7 @@ class InsertBehaviorTest extends TestCase
             'published' => 1
         ];
         $entity = $this->Articles->newEntity($newData);
-        $now = Chronos::now();
+        $now = FrozenTime::now();
 
         $this->Articles->insertOnce($entity);
 
@@ -240,7 +241,7 @@ class InsertBehaviorTest extends TestCase
 
         $actual = $this->Articles
             ->find()
-            ->where( [
+            ->where([
                 'title' => 'First Article',
                 'body IS' => null,
                 'published' => 1

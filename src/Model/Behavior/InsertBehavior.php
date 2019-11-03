@@ -5,6 +5,7 @@ namespace Itosho\EasyQuery\Model\Behavior;
 use App\Model\Entity\ResourceFormatterTrait;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\StatementInterface;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Behavior;
 use Cake\ORM\Entity;
 use Cake\ORM\Query;
@@ -67,16 +68,17 @@ class InsertBehavior extends Behavior
     {
         if ($this->_config['event']['beforeSave']) {
             $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
-            if ($entity->created) {
-                $entity->created= $entity->created->toDateString();
-            }
-            if ($entity->modified) {
-                $entity->modified= $entity->modified->toDateString();
-            }
         }
 
         $entity->setVirtual([]);
         $insertData = $entity->toArray();
+        if (isset($insertData['created']) && !is_null($insertData['created'])) {
+            $insertData['created'] = FrozenTime::now()->toDateTimeString();
+        }
+        if (isset($insertData['modified']) && !is_null($insertData['modified'])) {
+            $insertData['modified'] = FrozenTime::now()->toDateTimeString();
+        }
+
         $escape = function ($content) {
             return is_null($content) ? 'NULL' : '\'' . addslashes($content) . '\'';
         };
