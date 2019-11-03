@@ -173,7 +173,7 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
-     * insertOnce() test
+     * insertOnce() test when duplicated
      *
      * @return void
      */
@@ -191,6 +191,67 @@ class InsertBehaviorTest extends TestCase
         $actual = $this->Articles
             ->find()
             ->where($duplicatedData)
+            ->all();
+
+        $this->assertCount(1, $actual, 'fail insert once.');
+    }
+
+    /**
+     * insertOnce() test with conditions
+     *
+     * @return void
+     */
+    public function testInsertOnceWithConditions()
+    {
+        $newData = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+            'published' => 0
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $condition = [
+            'title' => 'Brand New First Article',
+            'body' => 'Brand New First Article Body',
+        ];
+
+        $this->Articles->insertOnce($entity, $condition);
+
+        $actual = $this->Articles
+            ->find()
+            ->where([
+                'title' => 'First Article',
+                'body' => 'First Article Body'
+            ])
+            ->all();
+
+        $this->assertCount(2, $actual, 'fail insert once.');
+    }
+
+    /**
+     * insertOnce() test when duplicated with conditions
+     *
+     * @return void
+     */
+    public function testInsertOnceWhenDuplicatedWithConditions()
+    {
+        $newData = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+            'published' => 0
+        ];
+        $entity = $this->Articles->newEntity($newData);
+
+        $condition = [
+            'title' => 'First Article',
+            'body' => 'First Article Body',
+        ];
+
+        $this->Articles->insertOnce($entity, $condition);
+
+        $actual = $this->Articles
+            ->find()
+            ->where($condition)
             ->all();
 
         $this->assertCount(1, $actual, 'fail insert once.');
