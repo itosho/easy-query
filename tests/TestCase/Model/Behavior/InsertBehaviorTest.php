@@ -3,6 +3,7 @@
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
 use Cake\Chronos\Chronos;
+use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -14,7 +15,7 @@ class InsertBehaviorTest extends TestCase
     /**
      * ArticlesTable Class
      *
-     * @var \Cake\ORM\Table
+     * @var Table
      */
     public $Articles;
     /**
