@@ -25,6 +25,9 @@ matrix:
     - php: 7.3
       env: PREFER_LOWEST=""
 
+    - php: '7.4snapshot'
+      env: PREFER_LOWEST=""
+
     - php: 7.3
       env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=" 
 
