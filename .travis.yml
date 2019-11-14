@@ -13,20 +13,27 @@ sudo: false
 
 env:
   matrix:
-    - DB=mysql db_dsn='mysql://travis@127.0.0.1/cakephp_test'
+    - DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
 
   global:
-    - DEFAULT=1
+    - DEFAULT=1 PREFER_LOWEST="--prefer-lowest"
 
 matrix:
   fast_finish: true
 
   include:
     - php: 7.3
-      env: PHPCS=1 DEFAULT=0
+      env: PREFER_LOWEST="" DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
+
+    - php: '7.4snapshot'
+      env: PREFER_LOWEST="" DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
 
     - php: 7.3
-      env: PHPSTAN=1 DEFAULT=0
+      env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=" 
+
+    - php: 7.3
+      env: PHPSTAN=1 DEFAULT=0 PREFER_LOWEST=" 
+
 
 cache:
   directories:
@@ -34,19 +41,22 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
-  - if [[ $TRAVIS_PHP_VERSION != 7.3 ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $TRAVIS_PHP_VERSION != '7.4snapshot' ]]; then phpenv config-rm xdebug.ini; fi
 
   - composer self-update
-  - composer install --prefer-dist --no-interaction
+  - composer update --prefer-stable --prefer-dist --no-interaction $PREFER_LOWEST
 
   - if [[ $DB = 'mysql' ]]; then mysql -e 'CREATE DATABASE cakephp_test; GRANT ALL PRIVILEGES ON cakephp_test.* TO travis@localhost;'; fi
 
   - if [[ $PHPCS = 1 ]]; then composer require cakephp/cakephp-codesniffer:"^3.0"; fi
   - if [[ $PHPSTAN = 1 ]]; then composer require phpstan/phpstan; fi
 
+  # see: https://github.com/cakephp/chronos/issues/106
+  - if [[ $TRAVIS_PHP_VERSION != 7.0 && $PREFER_LOWEST != "" ]]; then composer require  --prefer-stable --prefer-dist --no-interaction $PREFER_LOWEST cakephp/chronos:^1.0.1; fi
+
 script:
   - if [[ $DEFAULT = 1 && $TRAVIS_PHP_VERSION != 7.3 ]]; then vendor/bin/phpunit; fi
-  - if [[ $DEFAULT = 1 && $TRAVIS_PHP_VERSION = 7.3 ]]; then vendor/bin/phpunit --coverage-clover=clover.xml; fi
+  - if [[ $DEFAULT = 1 && $TRAVIS_PHP_VERSION = 7.3 ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml; fi
 
   - if [[ $PHPCS = 1 ]]; then vendor/bin/phpcs -n -p --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests; fi
   - if [[ $PHPSTAN = 1 ]]; then vendor/bin/phpstan analyse -c phpstan.neon -l 7 src; fi
