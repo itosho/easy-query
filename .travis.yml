@@ -29,10 +29,10 @@ matrix:
       env: PREFER_LOWEST="" DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
 
     - php: 7.3
-      env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=" 
+      env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=""
 
     - php: 7.3
-      env: PHPSTAN=1 DEFAULT=0 PREFER_LOWEST=" 
+      env: PHPSTAN=1 DEFAULT=0 PREFER_LOWEST=""
 
 
 cache:
