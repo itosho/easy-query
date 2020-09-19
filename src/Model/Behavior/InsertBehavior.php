@@ -22,7 +22,7 @@ class InsertBehavior extends Behavior
      * @var array
      */
     protected $_defaultConfig = [
-        'event' => ['beforeSave' => true]
+        'event' => ['beforeSave' => true],
     ];
 
     /**
@@ -78,15 +78,10 @@ class InsertBehavior extends Behavior
             $insertData['modified'] = FrozenTime::now()->toDateTimeString();
         }
 
-        $escape = function ($content) {
-            return is_null($content) ? 'NULL' : '\'' . addslashes($content) . '\'';
-        };
-
-        $escapedInsertData = array_map($escape, $insertData);
         $fields = array_keys($insertData);
         $existsConditions = $conditions;
         if (is_null($existsConditions)) {
-            $existsConditions = $this->getExistsConditions($escapedInsertData);
+            $existsConditions = $this->getExistsConditions($insertData);
         }
 
         $query = $this->_table
@@ -94,7 +89,7 @@ class InsertBehavior extends Behavior
             ->insert($fields)
             ->epilog(
                 $this
-                    ->buildTmpTableSelectQuery($escapedInsertData)
+                    ->buildTmpTableSelectQuery($insertData)
                     ->where(function (QueryExpression $exp) use ($existsConditions) {
                         $query = $this->_table
                             ->find()
@@ -111,32 +106,42 @@ class InsertBehavior extends Behavior
     /**
      * build tmp table's select query for insert select query
      *
-     * @param array $escapedData escaped array data
+     * @param array $insertData insert data
      * @throws LogicException select query is invalid
      * @return Query tmp table's select query
      */
-    private function buildTmpTableSelectQuery($escapedData)
+    private function buildTmpTableSelectQuery($insertData)
     {
         $driver = $this->_table
             ->getConnection()
             ->getDriver();
         $schema = [];
-        foreach ($escapedData as $key => $value) {
+        $binds = [];
+        foreach ($insertData as $key => $value) {
             $col = $driver->quoteIdentifier($key);
-            $schema[] = "{$value} AS {$col}";
+            if (is_null($value)) {
+                $schema[] = "NULL AS {$col}";
+            } else {
+                $bindKey = ':' . strtolower($key);
+                $binds[$bindKey] = $value;
+                $schema[] = "{$bindKey} AS {$col}";
+            }
         }
 
         $tmpTable = TableRegistry::getTableLocator()->get('tmp', [
-            'schema' => $this->_table->getSchema()
+            'schema' => $this->_table->getSchema(),
         ]);
         $query = $tmpTable
             ->find()
-            ->select(array_keys($escapedData))
+            ->select(array_keys($insertData))
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
         /** @var Query $selectQuery */
         $selectQuery = $query;
+        foreach ($binds as $key => $value) {
+            $selectQuery->bind($key, $value);
+        }
 
         return $selectQuery;
     }
@@ -144,22 +149,18 @@ class InsertBehavior extends Behavior
     /**
      * get conditions for finding a record already exists
      *
-     * @param array $escapedData escaped array data
+     * @param array $insertData insert data
      * @return array conditions
      */
-    private function getExistsConditions($escapedData)
+    private function getExistsConditions($insertData)
     {
         $autoFillFields = ['created', 'modified'];
         $existsConditions = [];
-        foreach ($escapedData as $field => $value) {
+        foreach ($insertData as $field => $value) {
             if (in_array($field, $autoFillFields, true)) {
                 continue;
             }
-            if ($value === 'NULL') {
-                $existsConditions[] = "{$field} IS NULL";
-            } else {
-                $existsConditions[] = "{$field} = {$value}";
-            }
+            $existsConditions[$field . ' IS'] = $value;
         }
 
         return $existsConditions;

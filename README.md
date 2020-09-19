@@ -10,8 +10,8 @@ CakePHP behavior plugin for easily some complicated queries.
 
 ## Requirements
 
-- PHP 7.0+
-- CakePHP 3.5+
+- PHP 7.1+
+- CakePHP 3.6+
 - MySQL 5.6+
 
 ## Installation
@@ -28,12 +28,12 @@ composer require itosho/easy-query
 $this->Tags = TableRegistry::get('Tags');
 $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
     'uniqueColumns' => ['name'],
-    'updateColumns' => ['description', 'modified']
+    'updateColumns' => ['description', 'modified'],
 ]);
 
 $data = [
     'name' => 'cakephp',
-    'description' => 'php web framework'
+    'description' => 'php web framework',
 ];
 $entity = $this->Tags->newEntity($data);
 $this->Tags->upsert($entity);
@@ -44,17 +44,17 @@ $this->Tags->upsert($entity);
 ```php
 $this->Tags = TableRegistry::get('Tags');
 $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-    'updateColumns' => ['description', 'modified']
+    'updateColumns' => ['description', 'modified'],
 ]);
 
 $data = [
     [
         'name' => 'cakephp',
-        'description' => 'php web framework'
+        'description' => 'php web framework',
     ],
     [
         'name' => 'rubyonrails',
-        'description' => 'ruby web framework'
+        'description' => 'ruby web framework',
     ]
 ];
 $entities = $this->Tags->newEntities($data);
@@ -71,12 +71,12 @@ $data = [
     [
         'title' => 'First Article',
         'body' => 'First Article Body',
-        'published' => '1'
+        'published' => '1',
     ],
     [
         'title' => 'Second Article',
         'body' => 'Second Article Body',
-        'published' => '0'
+        'published' => '0',
     ]
 ];
 $entities = $this->Articles->newEntities($data);
@@ -95,12 +95,10 @@ $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
 
 $data = [
     'title' => 'New Article?',
-    'body' => 'New Article Body?'
+    'body' => 'New Article Body?',
 ];
 $entity = $this->Articles->newEntity($data);
-$condition = [
-    'title' => 'New Article?'
-];
+$condition = ['title' => 'New Article?'];
 
 $this->Articles->insertOnce($entities);
 ```
@@ -123,7 +121,7 @@ $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
 
 $data = [
     'title' => 'New Article',
-    'body' => 'New Article Body'
+    'body' => 'New Article Body',
 ];
 $entity = $this->Articles->newEntity($data);
 
@@ -146,7 +144,7 @@ And you can change the action manually by using `event` config like this.
 ```php
 // default value is true
 $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
-    'event' => ['beforeSave' => false]
+    'event' => ['beforeSave' => false],
 ]);
 ```
 

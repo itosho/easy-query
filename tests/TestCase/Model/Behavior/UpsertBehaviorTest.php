@@ -34,7 +34,7 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Tags');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name'],
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
     }
 
@@ -60,7 +60,7 @@ class UpsertBehaviorTest extends TestCase
             'name' => 'tag4',
             'description' => 'tag4 description',
             'created' => $now,
-            'modified' => $now
+            'modified' => $now,
         ];
         $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
@@ -94,7 +94,7 @@ class UpsertBehaviorTest extends TestCase
 
         $record = [
             'name' => 'tag4',
-            'description' => 'tag4 description'
+            'description' => 'tag4 description',
         ];
         $now = Chronos::now();
         $expectedRecord = $record;
@@ -133,7 +133,7 @@ class UpsertBehaviorTest extends TestCase
             'name' => 'tag1',
             'description' => 'brand new tag1 description',
             'created' => '2017-10-01 00:00:00',
-            'modified' => '2017-10-01 00:00:00'
+            'modified' => '2017-10-01 00:00:00',
         ];
         $entity = $this->Tags->newEntity($record);
         $actual = $this->Tags->upsert($entity);
@@ -169,7 +169,7 @@ class UpsertBehaviorTest extends TestCase
 
         $record = [
             'name' => 'tag1',
-            'description' => 'brand new tag1 description'
+            'description' => 'brand new tag1 description',
         ];
         $now = Chronos::now();
         $currentCreated = '2017-09-01 00:00:00';
@@ -209,13 +209,13 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name'],
             'updateColumns' => ['description', 'modified'],
-            'event' => ['beforeSave' => false]
+            'event' => ['beforeSave' => false],
         ]);
         $this->Tags->addBehavior('Timestamp');
 
         $record = [
             'name' => 'tag4',
-            'description' => 'tag4 description'
+            'description' => 'tag4 description',
         ];
         $expectedRecord = $record;
         $expectedRecord['created IS'] = null;
@@ -245,14 +245,14 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'uniqueColumns' => ['name']
+            'uniqueColumns' => ['name'],
         ]);
 
         $data = [
             'name' => 'tag4',
             'description' => 'tag4 description',
             'created' => '2017-09-01 00:00:00',
-            'modified' => '2017-09-01 00:00:00'
+            'modified' => '2017-09-01 00:00:00',
         ];
         $entity = $this->Tags->newEntity($data);
         $this->Tags->upsert($entity);
@@ -269,14 +269,14 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
 
         $data = [
             'name' => 'tag4',
             'description' => 'tag4 description',
             'created' => '2017-09-01 00:00:00',
-            'modified' => '2017-09-01 00:00:00'
+            'modified' => '2017-09-01 00:00:00',
         ];
         $entity = $this->Tags->newEntity($data);
         $this->Tags->upsert($entity);
@@ -291,7 +291,7 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
 
         $records = $this->getBaseInsertRecords();
@@ -319,7 +319,7 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
         $this->Tags->addBehavior('Timestamp');
 
@@ -349,7 +349,7 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
 
         $records = $this->getBaseUpdateRecords();
@@ -379,7 +379,7 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
         $this->Tags->addBehavior('Timestamp');
 
@@ -411,7 +411,7 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified'],
-            'event' => ['beforeSave' => false]
+            'event' => ['beforeSave' => false],
         ]);
         $this->Tags->addBehavior('Timestamp');
 
@@ -465,7 +465,7 @@ class UpsertBehaviorTest extends TestCase
     {
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
-            'updateColumns' => ['description', 'modified']
+            'updateColumns' => ['description', 'modified'],
         ]);
 
         $this->Tags->bulkUpsert([]);
@@ -481,16 +481,16 @@ class UpsertBehaviorTest extends TestCase
         return [
             [
                 'name' => 'tag4',
-                'description' => 'tag4 description'
+                'description' => 'tag4 description',
             ],
             [
                 'name' => 'tag5',
-                'description' => 'tag5 description'
+                'description' => 'tag5 description',
             ],
             [
                 'name' => 'tag6',
-                'description' => 'tag6 description'
-            ]
+                'description' => 'tag6 description',
+            ],
         ];
     }
 
@@ -504,16 +504,16 @@ class UpsertBehaviorTest extends TestCase
         return [
             [
                 'name' => 'tag1',
-                'description' => 'brand new tag1 description'
+                'description' => 'brand new tag1 description',
             ],
             [
                 'name' => 'tag2',
-                'description' => 'brand new tag2 description'
+                'description' => 'brand new tag2 description',
             ],
             [
                 'name' => 'tag3',
-                'description' => 'brand new tag3 description'
-            ]
+                'description' => 'brand new tag3 description',
+            ],
         ];
     }
 }

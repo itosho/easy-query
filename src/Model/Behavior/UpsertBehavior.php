@@ -21,7 +21,7 @@ class UpsertBehavior extends Behavior
     protected $_defaultConfig = [
         'updateColumns' => null,
         'uniqueColumns' => null,
-        'event' => ['beforeSave' => true]
+        'event' => ['beforeSave' => true],
     ];
 
     /**
