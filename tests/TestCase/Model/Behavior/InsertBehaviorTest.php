@@ -334,7 +334,7 @@ class InsertBehaviorTest extends TestCase
                 'title' => 'Sixth Article',
                 'body' => 'Sixth Article Body',
                 'published' => 1,
-            ]
+            ],
         ];
     }
 }

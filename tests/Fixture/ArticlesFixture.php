@@ -38,6 +38,6 @@ class ArticlesFixture extends TestFixture
             'published' => 1,
             'created' => '2017-09-01 00:00:00',
             'modified' => '2017-09-01 00:00:00',
-        ]
+        ],
     ];
 }

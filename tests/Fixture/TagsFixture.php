@@ -35,6 +35,6 @@ class TagsFixture extends TestFixture
             'description' => 'tag3 description',
             'created' => '2017-09-01 00:00:00',
             'modified' => '2017-09-01 00:00:00',
-        ]
+        ],
     ];
 }

@@ -215,7 +215,7 @@ class UpsertBehaviorTest extends TestCase
 
         $record = [
             'name' => 'tag4',
-            'description' => 'tag4 description'
+            'description' => 'tag4 description',
         ];
         $expectedRecord = $record;
         $expectedRecord['created IS'] = null;
@@ -490,7 +490,7 @@ class UpsertBehaviorTest extends TestCase
             [
                 'name' => 'tag6',
                 'description' => 'tag6 description',
-            ]
+            ],
         ];
     }
 
@@ -513,7 +513,7 @@ class UpsertBehaviorTest extends TestCase
             [
                 'name' => 'tag3',
                 'description' => 'brand new tag3 description',
-            ]
+            ],
         ];
     }
 }
