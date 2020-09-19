@@ -79,7 +79,7 @@ class InsertBehavior extends Behavior
         }
 
         $escape = function ($content) {
-            return is_null($content) ? 'NULL' : '\'' . addslashes($content) . '\'';
+            return is_null($content) ? 'NULL' : $content;
         };
 
         $escapedInsertData = array_map($escape, $insertData);
@@ -123,7 +123,8 @@ class InsertBehavior extends Behavior
         $schema = [];
         foreach ($escapedData as $key => $value) {
             $col = $driver->quoteIdentifier($key);
-            $schema[] = "{$value} AS {$col}";
+            $bindKey = strtolower(trim($key));
+            $schema[] = ":{$bindKey} AS {$col}";
         }
 
         $tmpTable = TableRegistry::getTableLocator()->get('tmp', [
@@ -135,6 +136,12 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
+        foreach ($escapedData as $key => $value) {
+            $bindKey = strtolower(trim($key));
+            $query->bind(":{$bindKey}", $value);
+        }
+
+
         /** @var Query $selectQuery */
         $selectQuery = $query;
 
