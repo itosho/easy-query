@@ -25,7 +25,7 @@ composer require itosho/easy-query
 ### Upsert
 
 ```php
-$this->Tags = TableRegistry::get('Tags');
+$this->Tags = TableRegistry::getTableLocator()->get('Tags');
 $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
     'uniqueColumns' => ['name'],
     'updateColumns' => ['description', 'modified'],
@@ -42,7 +42,7 @@ $this->Tags->upsert($entity);
 ### Bulk Upsert
 
 ```php
-$this->Tags = TableRegistry::get('Tags');
+$this->Tags = TableRegistry::getTableLocator()->get('Tags');
 $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
     'updateColumns' => ['description', 'modified'],
 ]);
@@ -64,7 +64,7 @@ $this->Tags->bulkUpsert($entities);
 ### Bulk Insert
 
 ```php
-$this->Articles = TableRegistry::get('Articles');
+$this->Articles = TableRegistry::getTableLocator()->get('Articles');
 $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
 
 $data = [
@@ -90,7 +90,7 @@ For inserting a record just once.
 Specify search conditions.
 
 ```php
-$this->Articles = TableRegistry::get('Articles');
+$this->Articles = TableRegistry::getTableLocator()->get('Articles');
 $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
 
 $data = [
@@ -116,7 +116,7 @@ SELECT 'New Article?', 'New Article Body?' FROM tmp WHERE NOT EXISTS (
 Auto set search conditions with a inserting record.
 
 ```php
-$this->Articles = TableRegistry::get('Articles');
+$this->Articles = TableRegistry::getTableLocator()->get('Articles');
 $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
 
 $data = [
