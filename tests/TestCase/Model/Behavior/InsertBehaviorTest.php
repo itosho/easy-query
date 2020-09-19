@@ -110,7 +110,7 @@ class InsertBehaviorTest extends TestCase
     {
         $this->Articles->removeBehavior('Insert');
         $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
-            'event' => ['beforeSave' => false]
+            'event' => ['beforeSave' => false],
         ]);
 
         $records = $this->getBaseInsertRecords();
@@ -159,7 +159,7 @@ class InsertBehaviorTest extends TestCase
         $newData = [
             'title' => 'New Article',
             'body' => 'New Article Body',
-            'published' => 1
+            'published' => 1,
         ];
         $entity = $this->Articles->newEntity($newData);
 
@@ -185,7 +185,7 @@ class InsertBehaviorTest extends TestCase
         $newData = [
             'title' => 'New Article',
             'body' => 'New Article Body',
-            'published' => 1
+            'published' => 1,
         ];
         $entity = $this->Articles->newEntity($newData);
         $now = FrozenTime::now();
@@ -209,7 +209,7 @@ class InsertBehaviorTest extends TestCase
         $duplicatedData = [
             'title' => 'First Article',
             'body' => 'First Article Body',
-            'published' => 1
+            'published' => 1,
         ];
         $entity = $this->Articles->newEntity($duplicatedData);
 
@@ -233,7 +233,7 @@ class InsertBehaviorTest extends TestCase
         $newData = [
             'title' => 'First Article',
             'body' => null,
-            'published' => 1
+            'published' => 1,
         ];
         $entity = $this->Articles->newEntity($newData);
 
@@ -244,7 +244,7 @@ class InsertBehaviorTest extends TestCase
             ->where([
                 'title' => 'First Article',
                 'body IS' => null,
-                'published' => 1
+                'published' => 1,
             ])
             ->all();
 
@@ -261,7 +261,7 @@ class InsertBehaviorTest extends TestCase
         $newData = [
             'title' => 'First Article',
             'body' => 'First Article Body',
-            'published' => 0
+            'published' => 0,
         ];
         $entity = $this->Articles->newEntity($newData);
 
@@ -276,7 +276,7 @@ class InsertBehaviorTest extends TestCase
             ->find()
             ->where([
                 'title' => 'First Article',
-                'body' => 'First Article Body'
+                'body' => 'First Article Body',
             ])
             ->all();
 
@@ -293,7 +293,7 @@ class InsertBehaviorTest extends TestCase
         $newData = [
             'title' => 'First Article',
             'body' => 'First Article Body',
-            'published' => 0
+            'published' => 0,
         ];
         $entity = $this->Articles->newEntity($newData);
 
@@ -323,17 +323,17 @@ class InsertBehaviorTest extends TestCase
             [
                 'title' => 'Fourth Article',
                 'body' => 'Fourth Article Body',
-                'published' => 1
+                'published' => 1,
             ],
             [
                 'title' => 'Fifth Article',
                 'body' => 'Fifth Article Body',
-                'published' => 1
+                'published' => 1,
             ],
             [
                 'title' => 'Sixth Article',
                 'body' => 'Sixth Article Body',
-                'published' => 1
+                'published' => 1,
             ]
         ];
     }
