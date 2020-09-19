@@ -86,7 +86,7 @@ class InsertBehavior extends Behavior
         $fields = array_keys($insertData);
         $existsConditions = $conditions;
         if (is_null($existsConditions)) {
-            $existsConditions = $this->getExistsConditions($escapedInsertData);
+            $existsConditions = $this->getExistsConditions($insertData);
         }
 
         $query = $this->_table
@@ -144,22 +144,18 @@ class InsertBehavior extends Behavior
     /**
      * get conditions for finding a record already exists
      *
-     * @param array $escapedData escaped array data
+     * @param array $insertData insert data
      * @return array conditions
      */
-    private function getExistsConditions($escapedData)
+    private function getExistsConditions($insertData)
     {
         $autoFillFields = ['created', 'modified'];
         $existsConditions = [];
-        foreach ($escapedData as $field => $value) {
+        foreach ($insertData as $field => $value) {
             if (in_array($field, $autoFillFields, true)) {
                 continue;
             }
-            if ($value === 'NULL') {
-                $existsConditions[] = "{$field} IS NULL";
-            } else {
-                $existsConditions[] = "{$field} = {$value}";
-            }
+            $existsConditions[$field . ' IS'] = $value;
         }
 
         return $existsConditions;
