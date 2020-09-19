@@ -29,7 +29,7 @@ class InsertBehaviorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         $this->Articles = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Articles');
@@ -39,7 +39,7 @@ class InsertBehaviorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         TableRegistry::getTableLocator()->clear();

@@ -28,7 +28,7 @@ class UpsertBehaviorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp() :void
     {
         parent::setUp();
         $this->Tags = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Tags');
@@ -41,7 +41,7 @@ class UpsertBehaviorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown() :void
     {
         parent::tearDown();
         TableRegistry::getTableLocator()->clear();
