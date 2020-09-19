@@ -144,18 +144,18 @@ class InsertBehavior extends Behavior
     /**
      * get conditions for finding a record already exists
      *
-     * @param array $escapedData escaped array data
+     * @param array $insertData insert data
      * @return array conditions
      */
-    private function getExistsConditions($escapedData)
+    private function getExistsConditions($insertData)
     {
         $autoFillFields = ['created', 'modified'];
         $existsConditions = [];
-        foreach ($escapedData as $field => $value) {
+        foreach ($insertData as $field => $value) {
             if (in_array($field, $autoFillFields, true)) {
                 continue;
             }
-            $existsConditions["{$field} IS"] = $value;
+            $existsConditions[$field . ' IS'] = $value;
         }
 
         return $existsConditions;
