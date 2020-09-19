@@ -137,12 +137,11 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
-        foreach ($binds as $key => $value) {
-            $query->bind($key, $value);
-        }
-
         /** @var Query $selectQuery */
         $selectQuery = $query;
+        foreach ($binds as $key => $value) {
+            $selectQuery->bind($key, $value);
+        }
 
         return $selectQuery;
     }
