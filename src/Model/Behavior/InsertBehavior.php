@@ -22,7 +22,7 @@ class InsertBehavior extends Behavior
      * @var array
      */
     protected $_defaultConfig = [
-        'event' => ['beforeSave' => true]
+        'event' => ['beforeSave' => true],
     ];
 
     /**
@@ -127,7 +127,7 @@ class InsertBehavior extends Behavior
         }
 
         $tmpTable = TableRegistry::getTableLocator()->get('tmp', [
-            'schema' => $this->_table->getSchema()
+            'schema' => $this->_table->getSchema(),
         ]);
         $query = $tmpTable
             ->find()
