@@ -10,8 +10,8 @@ CakePHP behavior plugin for easily some complicated queries.
 
 ## Requirements
 
-- PHP 7.0+
-- CakePHP 3.5+
+- PHP 7.1+
+- CakePHP 3.6+
 - MySQL 5.6+
 
 ## Installation

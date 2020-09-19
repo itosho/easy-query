@@ -46,9 +46,6 @@ before_script:
   - if [[ $PHPCS = 1 ]]; then composer require cakephp/cakephp-codesniffer:"^3.0"; fi
   - if [[ $PHPSTAN = 1 ]]; then composer require phpstan/phpstan; fi
 
-  # see: https://github.com/cakephp/chronos/issues/106
-  - if [[ $TRAVIS_PHP_VERSION != 7.0 && $PREFER_LOWEST != "" ]]; then composer require  --prefer-stable --prefer-dist --no-interaction $PREFER_LOWEST cakephp/chronos:^1.0.1; fi
-
 script:
   - if [[ $DEFAULT = 1 && $TRAVIS_PHP_VERSION != 7.4 ]]; then vendor/bin/phpunit; fi
   - if [[ $DEFAULT = 1 && $TRAVIS_PHP_VERSION = 7.4 ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml; fi
