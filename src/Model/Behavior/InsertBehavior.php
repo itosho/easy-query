@@ -122,7 +122,7 @@ class InsertBehavior extends Behavior
             if (is_null($value)) {
                 $schema[] = "NULL AS {$col}";
             } else {
-                $bindKey = ':' . strtolower(trim($key));
+                $bindKey = ':' . strtolower($key);
                 $binds[$bindKey] = $value;
                 $schema[] = "{$bindKey} AS {$col}";
             }
