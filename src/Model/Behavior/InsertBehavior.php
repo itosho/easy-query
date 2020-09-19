@@ -121,15 +121,16 @@ class InsertBehavior extends Behavior
             ->getConnection()
             ->getDriver();
         $schema = [];
+        $binds = [];
         foreach ($escapedData as $key => $value) {
             $col = $driver->quoteIdentifier($key);
             if ($value === 'NULL') {
                 $schema[] = "{$value} AS {$col}";
             } else {
-                $bindKey = strtolower(trim($key));
-                $schema[] = ":{$bindKey} AS {$col}";
+                $bindKey = ':' . strtolower(trim($key));
+                $binds[$bindKey] = $value;
+                $schema[] = "{$bindKey} AS {$col}";
             }
-
         }
 
         $tmpTable = TableRegistry::getTableLocator()->get('tmp', [
@@ -141,13 +142,9 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
-        foreach ($escapedData as $key => $value) {
-            if ($value !== 'NULL') {
-                $bindKey = strtolower(trim($key));
-                $query->bind(":{$bindKey}", $value);
-            }
+        foreach ($binds as $key => $value) {
+            $query->bind($key, $value);
         }
-
 
         /** @var Query $selectQuery */
         $selectQuery = $query;
