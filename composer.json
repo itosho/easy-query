@@ -1,6 +1,6 @@
 {
   "name": "itosho/easy-query",
-  "description": "CakePHP behavior plugin for easily some complicated queries.",
+  "description": "CakePHP behavior plugin for easily generating some complicated queries like (bulk) insert/upsert etc.",
   "type": "cakephp-plugin",
   "keywords": [
     "cakephp",
@@ -26,6 +26,7 @@
     "source": "https://github.com/itosho/easy-query"
   },
   "require": {
+    "php": ">=7.1.0",
     "cakephp/orm": "^3.6"
   },
   "require-dev": {
