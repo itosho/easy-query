@@ -26,6 +26,7 @@
     "source": "https://github.com/itosho/easy-query"
   },
   "require": {
+    "php": ">=7.1.0",
     "cakephp/orm": "^3.6"
   },
   "require-dev": {
