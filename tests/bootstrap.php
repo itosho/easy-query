@@ -42,7 +42,6 @@ $dbConfig = [
     'host' => getenv('db_host'),
     'username' => getenv('db_user'),
     'database' => getenv('db_name'),
-    'url' => null,
 ];
 ConnectionManager::drop('test');
 ConnectionManager::setConfig('test', $dbConfig);
