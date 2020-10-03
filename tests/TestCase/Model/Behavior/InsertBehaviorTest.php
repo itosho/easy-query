@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
@@ -29,7 +30,7 @@ class InsertBehaviorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->Articles = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Articles');
@@ -39,7 +40,7 @@ class InsertBehaviorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         TableRegistry::getTableLocator()->clear();
@@ -140,12 +141,13 @@ class InsertBehaviorTest extends TestCase
     /**
      * bulkInsert() test by no data
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage entities has no save data.
      * @return void
      */
     public function testBulkInsertNoSaveData()
     {
+        $this->expectExceptionMessage("entities has no save data.");
+        $this->expectException(\LogicException::class);
+
         $this->Articles->bulkInsert([]);
     }
 
@@ -317,7 +319,7 @@ class InsertBehaviorTest extends TestCase
      *
      * @return array
      */
-    private function getBaseInsertRecords()
+    private function getBaseInsertRecords(): array
     {
         return [
             [

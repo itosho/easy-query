@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Itosho\EasyQuery\Model\Behavior;
 
@@ -32,7 +33,7 @@ class InsertBehavior extends Behavior
      * @throws LogicException no save data
      * @return StatementInterface query result
      */
-    public function bulkInsert(array $entities)
+    public function bulkInsert(array $entities): StatementInterface
     {
         $saveData = [];
         foreach ($entities as $entity) {
@@ -40,7 +41,7 @@ class InsertBehavior extends Behavior
                 $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
             }
             $entity->setVirtual([]);
-            $saveData[] = $entity->toArray();
+            array_push($saveData, $entity->toArray());
         }
 
         if (!isset($saveData[0])) {
@@ -63,7 +64,7 @@ class InsertBehavior extends Behavior
      * @param array|null $conditions search conditions
      * @return StatementInterface query result
      */
-    public function insertOnce(Entity $entity, array $conditions = null)
+    public function insertOnce(Entity $entity, array $conditions = null): StatementInterface
     {
         if ($this->_config['event']['beforeSave']) {
             $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
@@ -83,22 +84,19 @@ class InsertBehavior extends Behavior
         if (is_null($existsConditions)) {
             $existsConditions = $this->getExistsConditions($insertData);
         }
+        $query = $this->_table->query()->insert($fields);
+        $subQuery = $this
+            ->buildTmpTableSelectQuery($insertData)
+            ->where(function (QueryExpression $exp) use ($existsConditions) {
+                $query = $this->_table
+                    ->find()
+                    ->where($existsConditions);
 
-        $query = $this->_table
-            ->query()
-            ->insert($fields)
-            ->epilog(
-                $this
-                    ->buildTmpTableSelectQuery($insertData)
-                    ->where(function (QueryExpression $exp) use ($existsConditions) {
-                        $query = $this->_table
-                            ->find()
-                            ->where($existsConditions);
-
-                        return $exp->notExists($query);
-                    })
-                    ->limit(1)
-            );
+                return $exp->notExists($query);
+            })
+            ->limit(1);
+        /* @phpstan-ignore-next-line */
+        $query = $query->epilog($subQuery);
 
         return $query->execute();
     }
@@ -110,7 +108,7 @@ class InsertBehavior extends Behavior
      * @throws LogicException select query is invalid
      * @return Query tmp table's select query
      */
-    private function buildTmpTableSelectQuery($insertData)
+    private function buildTmpTableSelectQuery($insertData): Query
     {
         $driver = $this->_table
             ->getConnection()
@@ -137,7 +135,6 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
-        /** @var Query $selectQuery */
         $selectQuery = $query;
         foreach ($binds as $key => $value) {
             $selectQuery->bind($key, $value);
@@ -152,7 +149,7 @@ class InsertBehavior extends Behavior
      * @param array $insertData insert data
      * @return array conditions
      */
-    private function getExistsConditions($insertData)
+    private function getExistsConditions(array $insertData): array
     {
         $autoFillFields = ['created', 'modified'];
         $existsConditions = [];

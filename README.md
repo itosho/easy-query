@@ -1,5 +1,4 @@
 # Easy Query
-
 CakePHP behavior plugin for easily generating some complicated queries like (bulk) insert/upsert etc.
 
 [![Build Status](https://travis-ci.org/itosho/easy-query.svg?branch=master)](https://travis-ci.org/itosho/easy-query)
@@ -9,13 +8,13 @@ CakePHP behavior plugin for easily generating some complicated queries like (bul
 [![License](https://poser.pugx.org/itosho/easy-query/license)](https://packagist.org/packages/itosho/easy-query)
 
 ## Requirements
-
-- PHP 7.1+
-- CakePHP 3.6+
+- PHP 7.2+
+- CakePHP 4.0+
 - MySQL 5.6+
 
-## Installation
+:warning: For CakePHP3.x, use 1.x branch.
 
+## Installation
 ```bash
 composer require itosho/easy-query
 ```
@@ -23,7 +22,6 @@ composer require itosho/easy-query
 ## Usage
 
 ### Upsert
-
 ```php
 $this->Tags = TableRegistry::getTableLocator()->get('Tags');
 $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
@@ -40,7 +38,6 @@ $this->Tags->upsert($entity);
 ```
 
 ### Bulk Upsert
-
 ```php
 $this->Tags = TableRegistry::getTableLocator()->get('Tags');
 $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
@@ -62,7 +59,6 @@ $this->Tags->bulkUpsert($entities);
 ```
 
 ### Bulk Insert
-
 ```php
 $this->Articles = TableRegistry::getTableLocator()->get('Articles');
 $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
@@ -149,9 +145,7 @@ $this->Articles->addBehavior('Itosho/EasyQuery.Insert', [
 ```
 
 ## Contributing
-
 Bug reports and pull requests are welcome on GitHub at https://github.com/itosho/easy-query.
 
 ## License
-
 The plugin is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).

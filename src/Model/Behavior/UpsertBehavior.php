@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Itosho\EasyQuery\Model\Behavior;
 
@@ -70,12 +71,10 @@ class UpsertBehavior extends Behavior
             $conditions[$column] = $upsertData[$column];
         }
 
-        $upsertEntity = $this->_table
+        return $this->_table
             ->find()
             ->where($conditions)
             ->first();
-
-        return $upsertEntity;
     }
 
     /**
@@ -85,7 +84,7 @@ class UpsertBehavior extends Behavior
      * @return StatementInterface query result
      * @throws LogicException invalid config or no save data
      */
-    public function bulkUpsert(array $entities)
+    public function bulkUpsert(array $entities): StatementInterface
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
             throw new LogicException('config updateColumns is invalid.');
@@ -129,7 +128,7 @@ class UpsertBehavior extends Behavior
      *
      * @return bool valid or invalid
      */
-    private function isValidArrayConfig($configName)
+    private function isValidArrayConfig(string $configName): bool
     {
         $config = $this->_config[$configName];
 
