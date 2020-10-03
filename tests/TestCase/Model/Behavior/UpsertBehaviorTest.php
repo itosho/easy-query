@@ -477,7 +477,7 @@ class UpsertBehaviorTest extends TestCase
      *
      * @return array
      */
-    private function getBaseInsertRecords()
+    private function getBaseInsertRecords(): array
     {
         return [
             [
@@ -500,7 +500,7 @@ class UpsertBehaviorTest extends TestCase
      *
      * @return array
      */
-    private function getBaseUpdateRecords()
+    private function getBaseUpdateRecords() :array
     {
         return [
             [

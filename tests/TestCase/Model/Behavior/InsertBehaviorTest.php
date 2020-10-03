@@ -318,7 +318,7 @@ class InsertBehaviorTest extends TestCase
      *
      * @return array
      */
-    private function getBaseInsertRecords()
+    private function getBaseInsertRecords(): array
     {
         return [
             [

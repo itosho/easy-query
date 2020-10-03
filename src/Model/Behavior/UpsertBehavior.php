@@ -32,7 +32,7 @@ class UpsertBehavior extends Behavior
      * @return EntityInterface|array|null result entity
      * @throws LogicException invalid config
      */
-    public function upsert(Entity $entity)
+    public function upsert(Entity $entity): EntityInterface
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
             throw new LogicException('config updateColumns is invalid.');
@@ -86,7 +86,7 @@ class UpsertBehavior extends Behavior
      * @return StatementInterface query result
      * @throws LogicException invalid config or no save data
      */
-    public function bulkUpsert(array $entities)
+    public function bulkUpsert(array $entities): StatementInterface
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
             throw new LogicException('config updateColumns is invalid.');
@@ -130,7 +130,7 @@ class UpsertBehavior extends Behavior
      *
      * @return bool valid or invalid
      */
-    private function isValidArrayConfig($configName)
+    private function isValidArrayConfig(string $configName): bool
     {
         $config = $this->_config[$configName];
 

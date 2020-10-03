@@ -33,7 +33,7 @@ class InsertBehavior extends Behavior
      * @throws LogicException no save data
      * @return StatementInterface query result
      */
-    public function bulkInsert(array $entities)
+    public function bulkInsert(array $entities): StatementInterface
     {
         $saveData = [];
         foreach ($entities as $entity) {
@@ -64,7 +64,7 @@ class InsertBehavior extends Behavior
      * @param array|null $conditions search conditions
      * @return StatementInterface query result
      */
-    public function insertOnce(Entity $entity, array $conditions = null)
+    public function insertOnce(Entity $entity, array $conditions = null): StatementInterface
     {
         if ($this->_config['event']['beforeSave']) {
             $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
@@ -111,7 +111,7 @@ class InsertBehavior extends Behavior
      * @throws LogicException select query is invalid
      * @return Query tmp table's select query
      */
-    private function buildTmpTableSelectQuery($insertData)
+    private function buildTmpTableSelectQuery($insertData): Query
     {
         $driver = $this->_table
             ->getConnection()
@@ -153,7 +153,7 @@ class InsertBehavior extends Behavior
      * @param array $insertData insert data
      * @return array conditions
      */
-    private function getExistsConditions($insertData)
+    private function getExistsConditions(array $insertData): array
     {
         $autoFillFields = ['created', 'modified'];
         $existsConditions = [];
