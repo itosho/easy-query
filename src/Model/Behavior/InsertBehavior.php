@@ -41,7 +41,7 @@ class InsertBehavior extends Behavior
                 $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
             }
             $entity->setVirtual([]);
-            $saveData[] = $entity->toArray();
+            array_push($saveData,$entity->toArray());
         }
 
         if (!isset($saveData[0])) {
@@ -138,7 +138,6 @@ class InsertBehavior extends Behavior
             ->from(
                 sprintf('(SELECT %s) as tmp', implode(',', $schema))
             );
-        /** @var Query $selectQuery */
         $selectQuery = $query;
         foreach ($binds as $key => $value) {
             $selectQuery->bind($key, $value);

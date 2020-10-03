@@ -71,12 +71,10 @@ class UpsertBehavior extends Behavior
             $conditions[$column] = $upsertData[$column];
         }
 
-        $upsertEntity = $this->_table
+        return $this->_table
             ->find()
             ->where($conditions)
             ->first();
-
-        return $upsertEntity;
     }
 
     /**
