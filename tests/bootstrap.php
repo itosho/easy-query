@@ -41,6 +41,7 @@ if (getenv('DB') === 'mysql') {
         'host' => getenv('db_host'),
         'username' => getenv('db_user'),
         'database' => getenv('db_name'),
+        'url' => null,
     ];
     ConnectionManager::setConfig('test', $dbConfig);
     ConnectionManager::setConfig('test_custom_i18n_datasource', $dbConfig);
