@@ -88,6 +88,7 @@ class InsertBehavior extends Behavior
         $query = $this->_table
             ->query()
             ->insert($fields)
+            /* @phpstan-ignore-next-line */
             ->epilog(
                 $this
                     ->buildTmpTableSelectQuery($insertData)
