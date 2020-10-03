@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Database\Driver\Mysql;
-use Cake\Database\Connection;
-use Cake\Datasource\ConnectionManager;
-
 /**
  * Test suite bootstrap for ContactManager.
  *
@@ -33,15 +29,4 @@ if (file_exists($root . '/config/bootstrap.php')) {
     return;
 }
 
-if (getenv('DB') === 'mysql') {
-    $dbConfig = [
-        'className' => Connection::class,
-        'driver' => Mysql::class,
-        'host' => getenv('db_host'),
-        'username' => getenv('db_user'),
-        'database' => getenv('db_name'),
-    ];
-    ConnectionManager::drop('test');
-    ConnectionManager::setConfig('test', $dbConfig);
-}
 require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';

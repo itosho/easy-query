@@ -12,7 +12,7 @@ sudo: false
 
 env:
   matrix:
-    - DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
+    - DB=mysql db_dsn='mysql://travis@127.0.0.1/cakephp_test'
 
   global:
     - DEFAULT=1 PREFER_LOWEST="--prefer-lowest"
@@ -22,7 +22,7 @@ matrix:
 
   include:
     - php: 7.4
-      env: PREFER_LOWEST="" DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
+      env: PREFER_LOWEST=""
 
     - php: 7.4
       env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=""
