@@ -238,12 +238,13 @@ class UpsertBehaviorTest extends TestCase
     /**
      * upsert() test when invalid update columns
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage config updateColumns is invalid.
      * @return void
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
+        $this->expectExceptionMessage("config updateColumns is invalid.");
+        $this->expectException(\LogicException::class);
+
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name'],
@@ -262,12 +263,13 @@ class UpsertBehaviorTest extends TestCase
     /**
      * upsert() test when invalid unique columns
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage config uniqueColumns is invalid.
      * @return void
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
+        $this->expectExceptionMessage("config uniqueColumns is invalid.");
+        $this->expectException(\LogicException::class);
+
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified'],
@@ -435,12 +437,13 @@ class UpsertBehaviorTest extends TestCase
     /**
      * bulkUpsert() test when invalid update columns
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage config updateColumns is invalid.
      * @return void
      */
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
+        $this->expectExceptionMessage("config updateColumns is invalid.");
+        $this->expectException(\LogicException::class);
+
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert');
 
@@ -458,12 +461,13 @@ class UpsertBehaviorTest extends TestCase
     /**
      * bulkUpsert() test by no data
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage entities has no save data.
      * @return void
      */
     public function testBulkUpsertNoSaveData()
     {
+        $this->expectExceptionMessage("entities has no save data.");
+        $this->expectException(\LogicException::class);
+
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'updateColumns' => ['description', 'modified'],

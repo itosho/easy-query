@@ -141,12 +141,13 @@ class InsertBehaviorTest extends TestCase
     /**
      * bulkInsert() test by no data
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage entities has no save data.
      * @return void
      */
     public function testBulkInsertNoSaveData()
     {
+        $this->expectExceptionMessage("entities has no save data.");
+        $this->expectException(\LogicException::class);
+
         $this->Articles->bulkInsert([]);
     }
 
