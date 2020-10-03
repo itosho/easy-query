@@ -41,7 +41,7 @@ class InsertBehavior extends Behavior
                 $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
             }
             $entity->setVirtual([]);
-            array_push($saveData,$entity->toArray());
+            array_push($saveData, $entity->toArray());
         }
 
         if (!isset($saveData[0])) {

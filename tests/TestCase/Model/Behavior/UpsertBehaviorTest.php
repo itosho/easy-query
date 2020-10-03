@@ -504,7 +504,7 @@ class UpsertBehaviorTest extends TestCase
      *
      * @return array
      */
-    private function getBaseUpdateRecords() :array
+    private function getBaseUpdateRecords(): array
     {
         return [
             [
