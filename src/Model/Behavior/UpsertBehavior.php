@@ -32,7 +32,7 @@ class UpsertBehavior extends Behavior
      * @return EntityInterface|array|null result entity
      * @throws LogicException invalid config
      */
-    public function upsert(Entity $entity): EntityInterface
+    public function upsert(Entity $entity)
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
             throw new LogicException('config updateColumns is invalid.');
