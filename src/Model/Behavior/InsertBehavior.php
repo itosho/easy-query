@@ -85,22 +85,21 @@ class InsertBehavior extends Behavior
             $existsConditions = $this->getExistsConditions($insertData);
         }
 
+        $subQuery = $this
+            ->buildTmpTableSelectQuery($insertData)
+            ->where(function (QueryExpression $exp) use ($existsConditions) {
+                $query = $this->_table
+                    ->find()
+                    ->where($existsConditions);
+
+                return $exp->notExists($query);
+            })
+            ->limit(1);
         $query = $this->_table
             ->query()
             ->insert($fields)
             /* @phpstan-ignore-next-line */
-            ->epilog(
-                $this
-                    ->buildTmpTableSelectQuery($insertData)
-                    ->where(function (QueryExpression $exp) use ($existsConditions) {
-                        $query = $this->_table
-                            ->find()
-                            ->where($existsConditions);
-
-                        return $exp->notExists($query);
-                    })
-                    ->limit(1)
-            );
+            ->epilog($subQuery);
 
         return $query->execute();
     }
