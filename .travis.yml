@@ -12,7 +12,7 @@ sudo: false
 
 env:
   matrix:
-    - DB=mysql DB_URL='mysql://root@127.0.0.1/cakephp_test?init[]=SET sql_mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"'
+    - DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
 
   global:
     - DEFAULT=1 PREFER_LOWEST="--prefer-lowest"
@@ -22,13 +22,14 @@ matrix:
 
   include:
     - php: 7.4
-      env: PREFER_LOWEST=""
+      env: PREFER_LOWEST="" DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
 
     - php: 7.4
       env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=""
 
     - php: 7.4
       env: PHPSTAN=1 DEFAULT=0 PREFER_LOWEST=""
+
 
 cache:
   directories:
@@ -39,7 +40,7 @@ before_script:
   - composer self-update
   - composer update --prefer-stable --prefer-dist --no-interaction $PREFER_LOWEST
 
-  - if [[ $DB == 'mysql' ]]; then mysql -u root -e 'CREATE DATABASE cakephp_test;'; fi
+  - if [[ $DB = 'mysql' ]]; then mysql -e 'CREATE DATABASE cakephp_test; GRANT ALL PRIVILEGES ON cakephp_test.* TO travis@localhost;'; fi
 
   - if [[ $PHPCS = 1 ]]; then composer require cakephp/cakephp-codesniffer:"^3.0"; fi
   - if [[ $PHPSTAN = 1 ]]; then composer require phpstan/phpstan; fi

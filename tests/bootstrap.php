@@ -8,6 +8,11 @@ declare(strict_types=1);
  * has been installed as a dependency of the plugin, or the plugin is itself
  * installed as a dependency of an application.
  */
+
+use Cake\Database\Connection;
+use Cake\Database\Driver\Mysql;
+use Cake\Datasource\ConnectionManager;
+
 $findRoot = function ($root) {
     do {
         $lastRoot = $root;
@@ -25,6 +30,20 @@ unset($findRoot);
 chdir($root);
 if (file_exists($root . '/config/bootstrap.php')) {
     require $root . '/config/bootstrap.php';
+
+    return;
 }
 
+if (getenv('DB') === 'mysql') {
+    $dbConfig = [
+        'className' => Connection::class,
+        'driver' => Mysql::class,
+        'host' => getenv('db_host'),
+        'username' => getenv('db_user'),
+        'database' => getenv('db_name'),
+    ];
+    ConnectionManager::setConfig('test', $dbConfig);
+    ConnectionManager::setConfig('test_custom_i18n_datasource', $dbConfig);
+    require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
+}
 require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
