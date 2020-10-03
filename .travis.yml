@@ -22,14 +22,13 @@ matrix:
 
   include:
     - php: 7.4
-      env: PREFER_LOWEST="" DB=mysql db_user=root db_host=0.0.0.0 db_name=cakephp_test
+      env: PREFER_LOWEST=""
 
     - php: 7.4
       env: PHPCS=1 DEFAULT=0 PREFER_LOWEST=""
 
     - php: 7.4
       env: PHPSTAN=1 DEFAULT=0 PREFER_LOWEST=""
-
 
 cache:
   directories:
