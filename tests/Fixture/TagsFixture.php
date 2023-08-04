@@ -7,18 +7,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class TagsFixture extends TestFixture
 {
-    public $fields = [
-        'id' => ['type' => 'integer'],
-        'name' => ['type' => 'string', 'length' => 255, 'null' => false],
-        'description' => ['type' => 'string', 'length' => 255, 'null' => false],
-        'created' => 'datetime',
-        'modified' => 'datetime',
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id']],
-            'unique' => ['type' => 'unique', 'columns' => ['name']],
-        ],
-    ];
-    public $records = [
+    public array $records = [
         [
             'name' => 'tag1',
             'description' => 'tag1 description',
