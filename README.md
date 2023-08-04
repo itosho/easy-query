@@ -8,11 +8,9 @@ CakePHP behavior plugin for easily generating some complicated queries like (bul
 [![License](https://poser.pugx.org/itosho/easy-query/license)](https://packagist.org/packages/itosho/easy-query)
 
 ## Requirements
-- PHP 7.2+
-- CakePHP 4.0+
-- MySQL 5.6+
-
-:warning: For CakePHP3.x, use 1.x branch.
+- PHP 8.1+
+- CakePHP 5.0+
+- MySQL 8.0+ / MariaDB 10.4+
 
 ## Installation
 ```bash

@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
-use Cake\Chronos\Chronos;
+use Cake\I18n\DateTime;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use LogicException;
 
 /**
  * Itosho\EasyQuery\Model\Behavior\UpsertBehavior Test Case
@@ -18,13 +18,13 @@ class UpsertBehaviorTest extends TestCase
      *
      * @var Table
      */
-    public $Tags;
+    public Table $Tags;
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = ['plugin.Itosho/EasyQuery.Tags'];
+    public array $fixtures = ['plugin.Itosho/EasyQuery.Tags'];
 
     /**
      * {@inheritDoc}
@@ -32,7 +32,7 @@ class UpsertBehaviorTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->Tags = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Tags');
+        $this->Tags = $this->getTableLocator()->get('Itosho/EasyQuery.Tags');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
             'uniqueColumns' => ['name'],
             'updateColumns' => ['description', 'modified'],
@@ -45,7 +45,7 @@ class UpsertBehaviorTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
         unset($this->Tags);
     }
 
@@ -56,7 +56,7 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertByInsert()
     {
-        $now = Chronos::now();
+        $now = DateTime::now();
         $record = [
             'name' => 'tag4',
             'description' => 'tag4 description',
@@ -97,7 +97,7 @@ class UpsertBehaviorTest extends TestCase
             'name' => 'tag4',
             'description' => 'tag4 description',
         ];
-        $now = Chronos::now();
+        $now = DateTime::now();
         $expectedRecord = $record;
         $expectedRecord['created'] = $now;
         $expectedRecord['modified'] = $now;
@@ -172,7 +172,7 @@ class UpsertBehaviorTest extends TestCase
             'name' => 'tag1',
             'description' => 'brand new tag1 description',
         ];
-        $now = Chronos::now();
+        $now = DateTime::now();
         $currentCreated = '2017-09-01 00:00:00';
         $expectedRecord = $record;
         $expectedRecord['created'] = $currentCreated;
@@ -243,7 +243,7 @@ class UpsertBehaviorTest extends TestCase
     public function testUpsertInvalidUpdateColumnsConfig()
     {
         $this->expectExceptionMessage("config updateColumns is invalid.");
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
@@ -268,7 +268,7 @@ class UpsertBehaviorTest extends TestCase
     public function testUpsertInvalidUniqueColumnsConfig()
     {
         $this->expectExceptionMessage("config uniqueColumns is invalid.");
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
@@ -298,7 +298,7 @@ class UpsertBehaviorTest extends TestCase
         ]);
 
         $records = $this->getBaseInsertRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         foreach ($records as $key => $val) {
             $records[$key]['created'] = $now;
             $records[$key]['modified'] = $now;
@@ -327,7 +327,7 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->addBehavior('Timestamp');
 
         $records = $this->getBaseInsertRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         $expectedRecords = $records;
         foreach ($expectedRecords as $key => $val) {
             $expectedRecords[$key]['created'] = $now;
@@ -356,7 +356,7 @@ class UpsertBehaviorTest extends TestCase
         ]);
 
         $records = $this->getBaseUpdateRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         foreach ($records as $key => $val) {
             $records[$key]['created'] = $now;
             $records[$key]['modified'] = $now;
@@ -387,7 +387,7 @@ class UpsertBehaviorTest extends TestCase
         $this->Tags->addBehavior('Timestamp');
 
         $records = $this->getBaseUpdateRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         $currentCreated = '2017-09-01 00:00:00';
         $expectedRecords = $records;
         foreach ($expectedRecords as $key => $val) {
@@ -442,13 +442,13 @@ class UpsertBehaviorTest extends TestCase
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
         $this->expectExceptionMessage("config updateColumns is invalid.");
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert');
 
         $records = $this->getBaseInsertRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         foreach ($records as $key => $val) {
             $records[$key]['created'] = $now;
             $records[$key]['modified'] = $now;
@@ -466,7 +466,7 @@ class UpsertBehaviorTest extends TestCase
     public function testBulkUpsertNoSaveData()
     {
         $this->expectExceptionMessage("entities has no save data.");
-        $this->expectException(\LogicException::class);
+        $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
         $this->Tags->addBehavior('Itosho/EasyQuery.Upsert', [
