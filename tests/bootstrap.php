@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cake\Database\Connection;
-use Cake\Database\Driver\Mysql;
 use Cake\Datasource\ConnectionManager;
 use Cake\TestSuite\Fixture\SchemaLoader;
 use function Cake\Core\env;
@@ -39,12 +37,7 @@ if (file_exists($root . '/config/bootstrap.php')) {
 
 require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
 $dbConfig = [
-    'className' => Connection::class,
-    'driver' => Mysql::class,
-    'host' => getenv('db_host'),
-    'username' => getenv('db_user'),
-    'database' => getenv('db_name'),
-    'password' => getenv('db_pass'),
+    'url' => env('DB_URL'),
 ];
 ConnectionManager::drop('test');
 ConnectionManager::setConfig('test', $dbConfig);

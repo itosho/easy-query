@@ -5,10 +5,6 @@
         <ini name="memory_limit" value="-1"/>
         <ini name="apc.enable_cli" value="1"/>
         <env name="FIXTURE_SCHEMA_METADATA" value="./tests/schema.php"/>
-        <env name="db_host" value="127.0.0.1"/>
-        <env name="db_user" value="root"/>
-        <env name="db_name" value="cakephp"/>
-        <env name="db_pass" value="root"/>
     </php>
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
