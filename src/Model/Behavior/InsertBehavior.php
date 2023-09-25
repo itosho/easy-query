@@ -97,7 +97,7 @@ class InsertBehavior extends Behavior
                 return $exp->notExists($query);
             })
             ->limit(1);
-        /* @phpstan-ignore-next-line */
+
         $query = $query->epilog($subQuery);
 
         return $query->execute();
