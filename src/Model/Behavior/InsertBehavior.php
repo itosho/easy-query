@@ -18,10 +18,11 @@ use LogicException;
 class InsertBehavior extends Behavior
 {
     use LocatorAwareTrait;
+
     /**
      * Default config
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected array $_defaultConfig = [
         'event' => ['beforeSave' => true],
@@ -30,7 +31,7 @@ class InsertBehavior extends Behavior
     /**
      * execute bulk insert query
      *
-     * @param \Cake\Datasource\EntityInterface[] $entities insert entities
+     * @param array<\Cake\Datasource\EntityInterface> $entities insert entities
      * @throws \LogicException no save data
      * @return \Cake\Database\StatementInterface query result
      */
@@ -65,7 +66,7 @@ class InsertBehavior extends Behavior
      * @param array|null $conditions search conditions
      * @return \Cake\Database\StatementInterface query result
      */
-    public function insertOnce(EntityInterface $entity, array $conditions = null): StatementInterface
+    public function insertOnce(EntityInterface $entity, ?array $conditions = null): StatementInterface
     {
         if ($this->_config['event']['beforeSave']) {
             $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));

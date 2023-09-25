@@ -27,15 +27,14 @@
   },
   "require": {
     "php": ">=8.1",
-    "cakephp/orm": "5.x-dev"
+    "cakephp/orm": "^5.0.0"
   },
   "require-dev": {
-    "cakephp/cakephp": "5.x-dev",
+    "cakephp/cakephp": "^5.0.0",
     "phpunit/phpunit": "^10.1.0",
-    "cakephp/cakephp-codesniffer": "^5.0"
+    "cakephp/cakephp-codesniffer": "^5.0",
+    "vimeo/psalm": "^5.15"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "Itosho\\EasyQuery\\": "src"

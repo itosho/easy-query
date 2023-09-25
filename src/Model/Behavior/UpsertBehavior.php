@@ -16,7 +16,7 @@ class UpsertBehavior extends Behavior
     /**
      * Default config
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected array $_defaultConfig = [
         'updateColumns' => null,
@@ -79,7 +79,7 @@ class UpsertBehavior extends Behavior
     /**
      * execute bulk upsert query
      *
-     * @param \Cake\Datasource\EntityInterface[] $entities upsert entities
+     * @param array<\Cake\Datasource\EntityInterface> $entities upsert entities
      * @return \Cake\Database\StatementInterface query result
      * @throws \LogicException invalid config or no save data
      */
@@ -123,7 +123,6 @@ class UpsertBehavior extends Behavior
      * validate config value
      *
      * @param string $configName config key
-     *
      * @return bool valid or invalid
      */
     private function isValidArrayConfig(string $configName): bool

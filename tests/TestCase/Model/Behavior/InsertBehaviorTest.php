@@ -27,7 +27,7 @@ class InsertBehaviorTest extends TestCase
     public array $fixtures = ['plugin.Itosho/EasyQuery.Articles'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -37,7 +37,7 @@ class InsertBehaviorTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -144,7 +144,7 @@ class InsertBehaviorTest extends TestCase
      */
     public function testBulkInsertNoSaveData()
     {
-        $this->expectExceptionMessage("entities has no save data.");
+        $this->expectExceptionMessage('entities has no save data.');
         $this->expectException(LogicException::class);
 
         $this->Articles->bulkInsert([]);

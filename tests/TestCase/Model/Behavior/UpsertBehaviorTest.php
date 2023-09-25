@@ -27,7 +27,7 @@ class UpsertBehaviorTest extends TestCase
     public array $fixtures = ['plugin.Itosho/EasyQuery.Tags'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -40,7 +40,7 @@ class UpsertBehaviorTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
@@ -242,7 +242,7 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertInvalidUpdateColumnsConfig()
     {
-        $this->expectExceptionMessage("config updateColumns is invalid.");
+        $this->expectExceptionMessage('config updateColumns is invalid.');
         $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
@@ -267,7 +267,7 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testUpsertInvalidUniqueColumnsConfig()
     {
-        $this->expectExceptionMessage("config uniqueColumns is invalid.");
+        $this->expectExceptionMessage('config uniqueColumns is invalid.');
         $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
@@ -441,7 +441,7 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testBulkUpsertInvalidUpdateColumnsConfig()
     {
-        $this->expectExceptionMessage("config updateColumns is invalid.");
+        $this->expectExceptionMessage('config updateColumns is invalid.');
         $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
@@ -465,7 +465,7 @@ class UpsertBehaviorTest extends TestCase
      */
     public function testBulkUpsertNoSaveData()
     {
-        $this->expectExceptionMessage("entities has no save data.");
+        $this->expectExceptionMessage('entities has no save data.');
         $this->expectException(LogicException::class);
 
         $this->Tags->removeBehavior('Upsert');
