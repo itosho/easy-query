@@ -1,7 +1,6 @@
 # Easy Query
 CakePHP behavior plugin for easily generating some complicated queries like (bulk) insert/upsert etc.
 
-[![Build Status](https://travis-ci.org/itosho/easy-query.svg?branch=master)](https://travis-ci.org/itosho/easy-query)
 [![codecov](https://codecov.io/gh/itosho/easy-query/branch/master/graph/badge.svg)](https://codecov.io/gh/itosho/easy-query)
 [![Latest Stable Version](https://poser.pugx.org/itosho/easy-query/v/stable)](https://packagist.org/packages/itosho/easy-query)
 [![Total Downloads](https://poser.pugx.org/itosho/easy-query/downloads)](https://packagist.org/packages/itosho/easy-query)
@@ -11,6 +10,10 @@ CakePHP behavior plugin for easily generating some complicated queries like (bul
 - PHP 8.1+
 - CakePHP 5.0+
 - MySQL 8.0+ / MariaDB 10.4+
+
+### Notice
+- For CakePHP4.x, use 3.x tag.
+- For CakePHP3.x, use 1.x tag.
 
 ## Installation
 ```bash
