@@ -6,7 +6,6 @@ namespace Itosho\EasyQuery\Model\Behavior;
 use Cake\Database\StatementInterface;
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\Behavior;
-use Cake\ORM\Entity;
 use LogicException;
 
 /**
@@ -17,9 +16,9 @@ class UpsertBehavior extends Behavior
     /**
      * Default config
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'updateColumns' => null,
         'uniqueColumns' => null,
         'event' => ['beforeSave' => true],
@@ -28,11 +27,11 @@ class UpsertBehavior extends Behavior
     /**
      * execute upsert query
      *
-     * @param Entity $entity upsert entity
-     * @return EntityInterface|array|null result entity
-     * @throws LogicException invalid config
+     * @param \Cake\Datasource\EntityInterface $entity upsert entity
+     * @return \Cake\Datasource\EntityInterface|array|null result entity
+     * @throws \LogicException invalid config
      */
-    public function upsert(Entity $entity)
+    public function upsert(EntityInterface $entity): array|EntityInterface|null
     {
         if (!$this->isValidArrayConfig('updateColumns')) {
             throw new LogicException('config updateColumns is invalid.');
@@ -52,13 +51,13 @@ class UpsertBehavior extends Behavior
 
         $updateValues = [];
         foreach ($updateColumns as $column) {
-            $updateValues[] = "`{$column}`=VALUES(`{$column}`)";
+            $updateValues[] = "`$column`=VALUES(`$column`)";
         }
         $updateStatement = implode(', ', $updateValues);
         $expression = 'ON DUPLICATE KEY UPDATE ' . $updateStatement;
 
         $this->_table
-            ->query()
+            ->insertQuery()
             ->insert($fields)
             ->values($upsertData)
             ->epilog($expression)
@@ -80,9 +79,9 @@ class UpsertBehavior extends Behavior
     /**
      * execute bulk upsert query
      *
-     * @param Entity[] $entities upsert entities
-     * @return StatementInterface query result
-     * @throws LogicException invalid config or no save data
+     * @param array<\Cake\Datasource\EntityInterface> $entities upsert entities
+     * @return \Cake\Database\StatementInterface query result
+     * @throws \LogicException invalid config or no save data
      */
     public function bulkUpsert(array $entities): StatementInterface
     {
@@ -107,13 +106,12 @@ class UpsertBehavior extends Behavior
         $updateColumns = $this->_config['updateColumns'];
         $updateValues = [];
         foreach ($updateColumns as $column) {
-            $updateValues[] = "`{$column}`=VALUES(`{$column}`)";
+            $updateValues[] = "`$column`=VALUES(`$column`)";
         }
         $updateStatement = implode(', ', $updateValues);
         $expression = 'ON DUPLICATE KEY UPDATE ' . $updateStatement;
-
         $query = $this->_table
-            ->query()
+            ->insertQuery()
             ->insert($fields)
             ->epilog($expression);
         $query->clause('values')->setValues($saveData);
@@ -125,7 +123,6 @@ class UpsertBehavior extends Behavior
      * validate config value
      *
      * @param string $configName config key
-     *
      * @return bool valid or invalid
      */
     private function isValidArrayConfig(string $configName): bool

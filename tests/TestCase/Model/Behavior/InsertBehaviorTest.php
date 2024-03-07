@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Itosho\EasyQuery\Test\TestCase\Model\Behavior;
 
-use Cake\Chronos\Chronos;
-use Cake\I18n\FrozenTime;
+use Cake\I18n\DateTime;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use LogicException;
 
 /**
  * Itosho\EasyQuery\Model\Behavior\InsertBehavior Test Case
@@ -19,31 +18,31 @@ class InsertBehaviorTest extends TestCase
      *
      * @var Table
      */
-    public $Articles;
+    public Table $Articles;
     /**
      * Fixtures
      *
      * @var array
      */
-    public $fixtures = ['plugin.Itosho/EasyQuery.Articles'];
+    public array $fixtures = ['plugin.Itosho/EasyQuery.Articles'];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->Articles = TableRegistry::getTableLocator()->get('Itosho/EasyQuery.Articles');
+        $this->Articles = $this->getTableLocator()->get('Itosho/EasyQuery.Articles');
         $this->Articles->addBehavior('Itosho/EasyQuery.Insert');
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function tearDown(): void
     {
         parent::tearDown();
-        TableRegistry::getTableLocator()->clear();
+        $this->getTableLocator()->clear();
         unset($this->Articles);
     }
 
@@ -55,7 +54,7 @@ class InsertBehaviorTest extends TestCase
     public function testBulkInsert()
     {
         $records = $this->getBaseInsertRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         foreach ($records as $key => $val) {
             $record[$key]['created'] = $now;
             $record[$key]['modified'] = $now;
@@ -85,7 +84,7 @@ class InsertBehaviorTest extends TestCase
         $records[0]['modified'] = $customNow;
 
         $expectedRecords = $this->getBaseInsertRecords();
-        $now = Chronos::now();
+        $now = DateTime::now();
         foreach ($expectedRecords as $key => $val) {
             $expectedRecords[$key]['created'] = $now;
             $expectedRecords[$key]['modified'] = $now;
@@ -145,8 +144,8 @@ class InsertBehaviorTest extends TestCase
      */
     public function testBulkInsertNoSaveData()
     {
-        $this->expectExceptionMessage("entities has no save data.");
-        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('entities has no save data.');
+        $this->expectException(LogicException::class);
 
         $this->Articles->bulkInsert([]);
     }
@@ -190,7 +189,7 @@ class InsertBehaviorTest extends TestCase
             'published' => 1,
         ];
         $entity = $this->Articles->newEntity($newData);
-        $now = FrozenTime::now();
+        $now = DateTime::now();
 
         $this->Articles->insertOnce($entity);
 

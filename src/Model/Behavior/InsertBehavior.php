@@ -5,11 +5,11 @@ namespace Itosho\EasyQuery\Model\Behavior;
 
 use Cake\Database\Expression\QueryExpression;
 use Cake\Database\StatementInterface;
-use Cake\I18n\FrozenTime;
+use Cake\Datasource\EntityInterface;
+use Cake\I18n\DateTime;
 use Cake\ORM\Behavior;
-use Cake\ORM\Entity;
-use Cake\ORM\Query;
-use Cake\ORM\TableRegistry;
+use Cake\ORM\Locator\LocatorAwareTrait;
+use Cake\ORM\Query\SelectQuery;
 use LogicException;
 
 /**
@@ -17,21 +17,23 @@ use LogicException;
  */
 class InsertBehavior extends Behavior
 {
+    use LocatorAwareTrait;
+
     /**
      * Default config
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'event' => ['beforeSave' => true],
     ];
 
     /**
      * execute bulk insert query
      *
-     * @param Entity[] $entities insert entities
-     * @throws LogicException no save data
-     * @return StatementInterface query result
+     * @param array<\Cake\Datasource\EntityInterface> $entities insert entities
+     * @throws \LogicException no save data
+     * @return \Cake\Database\StatementInterface query result
      */
     public function bulkInsert(array $entities): StatementInterface
     {
@@ -50,7 +52,7 @@ class InsertBehavior extends Behavior
         $fields = array_keys($saveData[0]);
 
         $query = $this->_table
-            ->query()
+            ->insertQuery()
             ->insert($fields);
         $query->clause('values')->setValues($saveData);
 
@@ -60,11 +62,11 @@ class InsertBehavior extends Behavior
     /**
      * execute insert select query for saving a record just once
      *
-     * @param Entity $entity insert entity
+     * @param \Cake\Datasource\EntityInterface $entity insert entity
      * @param array|null $conditions search conditions
-     * @return StatementInterface query result
+     * @return \Cake\Database\StatementInterface query result
      */
-    public function insertOnce(Entity $entity, array $conditions = null): StatementInterface
+    public function insertOnce(EntityInterface $entity, ?array $conditions = null): StatementInterface
     {
         if ($this->_config['event']['beforeSave']) {
             $this->_table->dispatchEvent('Model.beforeSave', compact('entity'));
@@ -72,11 +74,11 @@ class InsertBehavior extends Behavior
 
         $entity->setVirtual([]);
         $insertData = $entity->toArray();
-        if (isset($insertData['created']) && !is_null($insertData['created'])) {
-            $insertData['created'] = FrozenTime::now()->toDateTimeString();
+        if (isset($insertData['created'])) {
+            $insertData['created'] = DateTime::now()->toDateTimeString();
         }
-        if (isset($insertData['modified']) && !is_null($insertData['modified'])) {
-            $insertData['modified'] = FrozenTime::now()->toDateTimeString();
+        if (isset($insertData['modified'])) {
+            $insertData['modified'] = DateTime::now()->toDateTimeString();
         }
 
         $fields = array_keys($insertData);
@@ -84,7 +86,7 @@ class InsertBehavior extends Behavior
         if (is_null($existsConditions)) {
             $existsConditions = $this->getExistsConditions($insertData);
         }
-        $query = $this->_table->query()->insert($fields);
+        $query = $this->_table->insertQuery()->insert($fields);
         $subQuery = $this
             ->buildTmpTableSelectQuery($insertData)
             ->where(function (QueryExpression $exp) use ($existsConditions) {
@@ -95,7 +97,7 @@ class InsertBehavior extends Behavior
                 return $exp->notExists($query);
             })
             ->limit(1);
-        /* @phpstan-ignore-next-line */
+
         $query = $query->epilog($subQuery);
 
         return $query->execute();
@@ -105,10 +107,10 @@ class InsertBehavior extends Behavior
      * build tmp table's select query for insert select query
      *
      * @param array $insertData insert data
-     * @throws LogicException select query is invalid
-     * @return Query tmp table's select query
+     * @return \Cake\ORM\Query\SelectQuery tmp table's select query
+     * @throws \LogicException select query is invalid
      */
-    private function buildTmpTableSelectQuery($insertData): Query
+    private function buildTmpTableSelectQuery(array $insertData): SelectQuery
     {
         $driver = $this->_table
             ->getConnection()
@@ -118,15 +120,15 @@ class InsertBehavior extends Behavior
         foreach ($insertData as $key => $value) {
             $col = $driver->quoteIdentifier($key);
             if (is_null($value)) {
-                $schema[] = "NULL AS {$col}";
+                $schema[] = "NULL AS $col";
             } else {
                 $bindKey = ':' . strtolower($key);
                 $binds[$bindKey] = $value;
-                $schema[] = "{$bindKey} AS {$col}";
+                $schema[] = "$bindKey AS $col";
             }
         }
 
-        $tmpTable = TableRegistry::getTableLocator()->get('tmp', [
+        $tmpTable = $this->fetchTable('tmp', [
             'schema' => $this->_table->getSchema(),
         ]);
         $query = $tmpTable
